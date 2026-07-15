@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #05050A;
+  --surface: #121217;
+  --surface-2: #1A1A22;
+  --glass: rgba(18, 18, 23, 0.65);
+  --electric: #00E5FF;
+  --pink: #FF007F;
+  --lime: #39FF14;
+  --yellow: #FFEA00;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0AB;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+@layer base {
+  :root {
+    --background: 240 20% 3%;
+    --foreground: 0 0% 100%;
+    --card: 240 12% 8%;
+    --card-foreground: 0 0% 100%;
+    --popover: 240 12% 9%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 187 100% 50%;
+    --primary-foreground: 240 20% 3%;
+    --secondary: 240 8% 14%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 240 8% 14%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 330 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 18%;
+    --input: 240 6% 18%;
+    --ring: 187 100% 50%;
+    --radius: 1rem;
+  }
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: #05050A;
+  color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Ambient background blobs */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 93% 86%, rgba(0, 229, 255, 0.16), transparent 31rem),
+    radial-gradient(circle at 6% 7%, rgba(255, 0, 127, 0.18), transparent 29rem),
+    #05050A;
+}
+.bg-mesh::before,
+.bg-mesh::after {
+  content: '';
+  position: absolute;
+  width: 620px;
+  height: 620px;
+  border-radius: 50%;
+  filter: blur(132px);
+  opacity: 0.4;
+}
+.bg-mesh::before {
+  background: #FF007F;
+  top: -210px;
+  left: -190px;
+}
+.bg-mesh::after {
+  background: #00E5FF;
+  width: 760px;
+  height: 760px;
+  bottom: -260px;
+  right: -190px;
+}
+
+.grain {
+  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+.glass {
+  background: rgba(18, 18, 23, 0.55);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.neon-text-lime { color: #39FF14; text-shadow: 0 0 12px rgba(57,255,20,0.5); }
+.neon-text-pink { color: #FF007F; text-shadow: 0 0 12px rgba(255,0,127,0.5); }
+.neon-text-blue { color: #00E5FF; text-shadow: 0 0 12px rgba(0,229,255,0.5); }
+.neon-text-yellow { color: #FFEA00; text-shadow: 0 0 12px rgba(255,234,0,0.5); }
+
+.btn-neon-lime {
+  background: #39FF14;
+  color: #05050A;
+  box-shadow: 0 0 20px rgba(57,255,20,0.45), inset 0 0 0 1px rgba(255,255,255,0.15);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.btn-neon-lime:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 0 32px rgba(57,255,20,0.7); }
+
+.btn-neon-pink {
+  background: #FF007F;
+  color: #FFFFFF;
+  box-shadow: 0 0 22px rgba(255,0,127,0.45);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.btn-neon-pink:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 0 34px rgba(255,0,127,0.7); }
+
+.btn-neon-blue {
+  background: #00E5FF;
+  color: #05050A;
+  box-shadow: 0 0 22px rgba(0,229,255,0.45);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.btn-neon-blue:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 0 34px rgba(0,229,255,0.7); }
+
+.card-fix {
+  background: linear-gradient(112deg, rgba(18,18,23,0.96), rgba(18,18,23,0.88));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #39FF14;
+  box-shadow: 0 0 12px rgba(57,255,20,0.7);
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.75; }
+}
+
+/* remove default focus outlines but keep for a11y */
+*:focus-visible {
+  outline: 2px solid #00E5FF;
+  outline-offset: 2px;
+}
