@@ -119,8 +119,13 @@ export default function AIDiagnosis() {
       });
       setDiagnosis(data);
       // suggest a service in this category
-      const svcRes = await api.get(`/services?category=${category}`);
-      if (svcRes.data?.length) setService(svcRes.data[0]);
+      if (data.recommended_service_id) {
+        const svcRes = await api.get(`/services/${data.recommended_service_id}`);
+        setService(svcRes.data);
+      } else {
+        const svcRes = await api.get(`/services?category=${category}`);
+        if (svcRes.data?.length) setService(svcRes.data[0]);
+      }
       setStep("result");
     } catch (e) {
       toast.error(e.response?.data?.detail || "AI analysis failed");
@@ -147,10 +152,24 @@ export default function AIDiagnosis() {
     setLiveTranscript(prev => prev + (prev ? "\n\n" : "") + `You: ${message || "(scan)"}\n\nAI: `);
 
     if (isSupabaseConfigured) {
-      const mock = "Hosted mode is connected to Supabase. Live AI streaming will be added next with a secure server function.";
-      for (const word of mock.split(" ")) {
-        await new Promise(resolve => setTimeout(resolve, 35));
-        setLiveTranscript(prev => prev + word + " ");
+      try {
+        const { data } = await api.post("/diagnosis", {
+          category,
+          image_base64: frame,
+          user_note: message || "Scan this photo and guide me.",
+          language,
+        });
+        const aiText = [
+          data.issue_summary,
+          ...(data.detected_problems || []),
+          data.ai_notes,
+        ].filter(Boolean).join("\n");
+        for (const word of aiText.split(" ")) {
+          await new Promise(resolve => setTimeout(resolve, 25));
+          setLiveTranscript(prev => prev + word + " ");
+        }
+      } catch (e) {
+        setLiveTranscript(prev => prev + `\n[${e.response?.data?.detail || "AI chat failed"}]`);
       }
       setLiveStreaming(false);
       return;

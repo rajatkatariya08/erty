@@ -121,7 +121,7 @@ function mapDiagnosis(row) {
     ai_notes: row.ai_notes,
     image_thumb: row.image_thumb,
     language: row.language,
-    test_mode: true,
+    test_mode: Boolean(row.test_mode),
     created_at: row.created_at,
   };
 }
@@ -522,27 +522,16 @@ async function post(path, payload = {}) {
   }
 
   if (path === "/diagnosis") {
-    const user = await currentUser();
-    const severity = "medium";
-    const { data, error } = await supabase
-      .from("diagnoses")
-      .insert({
-        user_id: user.user_id,
-        category: payload.category,
-        issue_summary: "Sample diagnosis - technician inspection recommended",
-        detected_problems: ["Possible worn component", "Reduced performance", "On-site check recommended"],
-        severity,
-        estimated_cost_min: 799,
-        estimated_cost_max: 1999,
-        recommended_service: "General inspection",
-        ai_notes: "This hosted version is connected to Supabase. Real AI diagnosis can be added next with an Edge Function or backend API.",
-        image_thumb: (payload.image_base64 || "").slice(0, 12000),
-        language: payload.language || "English",
-      })
-      .select("*")
-      .single();
-    if (error) fail(error.message);
-    return response(mapDiagnosis(data));
+    await currentUser();
+    const { data, error } = await supabase.functions.invoke("diagnose-image", {
+      body: payload,
+    });
+    if (error) {
+      fail(error.message || "AI Lens function failed", error.context?.status || 500);
+    }
+    if (!data) fail("AI Lens returned no diagnosis", 500);
+    if (data.error) fail(data.error, 500);
+    return response(data);
   }
 
   if (path === "/notifications/read-all") {
