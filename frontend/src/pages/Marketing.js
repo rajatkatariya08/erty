@@ -327,7 +327,7 @@ function ProcessScreen({ step }) {
   );
 }
 
-function ProcessShowcase() {
+function ProcessShowcase({ compact = false }) {
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(true);
   const step = WORK_STEPS[active];
@@ -339,8 +339,8 @@ function ProcessShowcase() {
   }, [active, playing]);
 
   return (
-    <section className="py-14" aria-labelledby="erty-process-title">
-      <SectionTitle kicker="How ERTY works" title="From problem to repaired, with no guesswork" body="Follow one clear journey from the first photo to a completed doorstep visit." />
+    <section className={compact ? "process-showcase-compact" : "py-14"} aria-labelledby="erty-process-title">
+      {!compact && <SectionTitle kicker="How ERTY works" title="From problem to repaired, with no guesswork" body="Follow one clear journey from the first photo to a completed doorstep visit." />}
       <div className="process-showcase">
         <div className="process-browser">
           <div className="process-browser-bar">
@@ -410,10 +410,9 @@ export function MarketingHome() {
             <Pill>Part price awareness</Pill>
           </div>
         </div>
-        <HomePreviewCard />
+        <ProcessShowcase compact />
       </section>
 
-      <ProcessShowcase />
 
       <section className="grid gap-6 py-12 lg:grid-cols-[0.9fr_1.1fr]">
         <div>

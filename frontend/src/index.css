@@ -181,6 +181,15 @@ h1, h2, h3, h4, h5, h6, .font-display {
   box-shadow: 0 24px 70px rgba(0,0,0,0.28);
 }
 
+.process-showcase-compact {
+  width: 100%;
+}
+
+.process-showcase-compact .process-showcase {
+  max-width: none;
+  margin: 0;
+}
+
 .process-browser {
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.1);
