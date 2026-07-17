@@ -29,7 +29,7 @@ export default function Layout() {
   if (!user) return null;
 
   const tabs = [
-    { to: "/", label: "Home", icon: Home, testid: "nav-home" },
+    { to: "/app", label: "Home", icon: Home, testid: "nav-home" },
     { to: "/bookings", label: "Bookings", icon: ClipboardList, testid: "nav-bookings" },
     { to: "/diagnose", label: "AI Diagnose", icon: ScanLine, testid: "nav-diagnose" },
     { to: "/profile", label: "Profile", icon: User, testid: "nav-profile" },

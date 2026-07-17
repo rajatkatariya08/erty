@@ -26,7 +26,7 @@ export default function AuthCallback() {
         setUser(data.user);
         // clean the hash
         window.history.replaceState(null, "", window.location.pathname);
-        navigate("/", { replace: true, state: { user: data.user } });
+        navigate("/app", { replace: true, state: { user: data.user } });
       } catch (e) {
         console.error("Auth callback failed", e);
         navigate("/login", { replace: true });
