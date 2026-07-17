@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight, BadgeCheck, Bike, BookOpenText, Camera,
-  ChevronRight, ClipboardCheck, HelpCircle, MapPin, PackageSearch,
-  ShieldCheck, Sparkles, UserCheck, WalletCards, WashingMachine, Wrench,
+  ChevronRight, ClipboardCheck, ExternalLink, HelpCircle, MapPin, PackageSearch,
+  Play, ShieldCheck, Sparkles, UserCheck, WalletCards, WashingMachine, Wrench,
 } from "lucide-react";
 
 const SERVICE_GROUPS = [
@@ -123,6 +123,53 @@ function MarketingShell({ title, description, children }) {
         </div>
       </header>
       <main className="relative z-10 mx-auto max-w-6xl px-5 pb-20 sm:px-8">{children}</main>
+      <footer className="relative z-10 border-t border-white/10 bg-[#07070D]/80">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
+          <div>
+            <Link to="/" className="font-display text-3xl font-black tracking-tight">
+              ER<span className="neon-text-lime">TY</span>
+            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-6 text-white/55">
+              Rapid doorstep help with clearer estimates, AI Lens guidance, and verified technician workflows in Gurugram.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-white/55"><Play className="h-3.5 w-3.5 fill-current" /> Google Play · Coming soon</span>
+              <span className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-white/55"><span className="text-sm"></span> App Store · Coming soon</span>
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-[0.22em] text-white/40">Explore</div>
+            <div className="mt-4 grid gap-3 text-sm text-white/65">
+              <Link to="/services" className="hover:text-white">Services</Link>
+              <Link to="/ai-diagnosis" className="hover:text-white">AI Lens</Link>
+              <Link to="/pricing" className="hover:text-white">Pricing</Link>
+              <Link to="/blog" className="hover:text-white">Repair guides</Link>
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-[0.22em] text-white/40">Company</div>
+            <div className="mt-4 grid gap-3 text-sm text-white/65">
+              <Link to="/about" className="hover:text-white">About ERTY</Link>
+              <Link to="/login" className="hover:text-white">Customer sign in</Link>
+              <Link to="/technician/signup" className="hover:text-white">Become a technician</Link>
+              <a href="https://hoardigo.com/portal.html" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">Become a media partner <ExternalLink className="h-3 w-3" /></a>
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-[0.22em] text-white/40">Get in touch</div>
+            <div className="mt-4 space-y-3 text-sm text-white/65">
+              <a href="mailto:support@erty.in" className="block hover:text-white">support@erty.in</a>
+              <p>ERTY Services Pvt Ltd<br />DLF Phase 1, Sector 27<br />Gurugram 122022</p>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-white/10">
+          <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-4 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+            <span>© {new Date().getFullYear()} ERTY Services Pvt Ltd. All rights reserved.</span>
+            <span>Built for clearer local repair decisions.</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -147,6 +194,9 @@ function HomePreviewCard() {
       <div className="blob" style={{ background: "#00E5FF", top: -60, right: -30 }} />
       <div className="blob" style={{ background: "#FF007F", bottom: -60, left: -40 }} />
       <div className="relative">
+        <div className="mb-4 flex flex-wrap gap-2">
+          {['Photo diagnosis', 'AI-powered estimates', 'Part price awareness'].map((label) => <span key={label} className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-white/55">{label}</span>)}
+        </div>
         <div className="inline-flex items-center gap-2 rounded-full bg-black/35 px-4 py-2 text-xs text-white/75">
           <span className="status-dot" /> AI Lens ready
         </div>
