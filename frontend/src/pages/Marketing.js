@@ -38,6 +38,7 @@ const WORK_STEPS = [
     Icon: Camera,
     accent: "#00E5FF",
     screen: "scan",
+    image: "/images/erty-process-scan.png",
   },
   {
     eyebrow: "DIAGNOSIS",
@@ -46,6 +47,7 @@ const WORK_STEPS = [
     Icon: ClipboardCheck,
     accent: "#39FF14",
     screen: "diagnosis",
+    image: "/images/erty-process-diagnosis.png",
   },
   {
     eyebrow: "PRICE AWARENESS",
@@ -54,6 +56,7 @@ const WORK_STEPS = [
     Icon: PackageSearch,
     accent: "#FFEA00",
     screen: "parts",
+    image: "/images/erty-process-parts.png",
   },
   {
     eyebrow: "BOOKING",
@@ -62,6 +65,7 @@ const WORK_STEPS = [
     Icon: UserCheck,
     accent: "#FF007F",
     screen: "booking",
+    image: "/images/erty-process-booking.png",
   },
 ];
 
@@ -266,10 +270,16 @@ function ScanIcon() {
   );
 }
 
+function processImageStyle(image) {
+  return {
+    backgroundImage: `linear-gradient(180deg, rgba(7,7,12,0.34), rgba(7,7,12,0.94)), url("${image}")`,
+  };
+}
+
 function ProcessScreen({ step }) {
   if (step.screen === "scan") {
     return (
-      <div className="process-screen process-screen-scan">
+      <div className="process-screen process-screen-scan" style={processImageStyle(step.image)}>
         <div className="process-live"><span className="status-dot" /> Camera ready</div>
         <div className="process-scan-frame">
           <WashingMachine className="h-16 w-16 text-white/75" />
@@ -282,7 +292,7 @@ function ProcessScreen({ step }) {
 
   if (step.screen === "diagnosis") {
     return (
-      <div className="process-screen">
+      <div className="process-screen" style={processImageStyle(step.image)}>
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="process-label">LIKELY ISSUE</div>
@@ -302,7 +312,7 @@ function ProcessScreen({ step }) {
 
   if (step.screen === "parts") {
     return (
-      <div className="process-screen">
+      <div className="process-screen" style={processImageStyle(step.image)}>
         <div className="flex items-center justify-between"><div><div className="process-label">POSSIBLE PARTS</div><div className="mt-1 font-display text-xl font-black">Market price check</div></div><PackageSearch className="h-8 w-8 text-[#FFEA00]" /></div>
         <div className="mt-5 space-y-2">
           <div className="process-part"><span>AC capacitor</span><strong>INR 450-900</strong></div>
@@ -315,7 +325,7 @@ function ProcessScreen({ step }) {
   }
 
   return (
-    <div className="process-screen">
+    <div className="process-screen" style={processImageStyle(step.image)}>
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#39FF14] text-[#05050A] shadow-[0_0_30px_rgba(57,255,20,0.4)]"><BadgeCheck className="h-8 w-8" /></div>
       <div className="mt-4 text-center font-display text-2xl font-black">Visit confirmed</div>
       <div className="mx-auto mt-2 max-w-xs text-center text-sm text-white/55">A verified appliance technician is assigned to your request.</div>

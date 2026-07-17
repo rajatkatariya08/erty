@@ -264,6 +264,9 @@ h1, h2, h3, h4, h5, h6, .font-display {
   border: 1px solid color-mix(in srgb, var(--process-accent) 38%, rgba(255,255,255,0.08));
   border-radius: 8px;
   background: linear-gradient(145deg, rgba(28,28,36,0.96), rgba(13,13,19,0.96));
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: normal;
   box-shadow: 0 0 38px color-mix(in srgb, var(--process-accent) 10%, transparent);
 }
 
