@@ -383,7 +383,13 @@ export function MarketingHome() {
       title="ERTY - Doorstep repair, AI diagnosis and technician booking in Gurugram"
       description="ERTY helps Gurugram customers diagnose home repair issues with AI Lens and book verified technicians for appliances, handyman jobs, car and bike support."
     >
-      <section className="grid min-h-[calc(100vh-92px)] items-center gap-10 py-10 lg:grid-cols-[1.02fr_0.98fr]">
+      <section className="marketing-hero relative grid min-h-[calc(100vh-92px)] items-center gap-10 overflow-hidden py-10 lg:grid-cols-[1.02fr_0.98fr]">
+        <img
+          src="/images/erty-technician-ac-diagnosis-hero.png"
+          alt="ERTY technician diagnosing an air conditioner at home"
+          className="marketing-hero-image pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="marketing-hero-shade pointer-events-none absolute inset-0" />
         <div>
           <div className="inline-flex items-center gap-2 rounded-full glass px-4 py-2 text-xs uppercase tracking-[0.22em] text-white/70">
             <Sparkles className="h-4 w-4 text-[#39FF14]" /> Executing Rapid Tasks For You

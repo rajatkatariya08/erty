@@ -190,6 +190,21 @@ h1, h2, h3, h4, h5, h6, .font-display {
   margin: 0;
 }
 
+.marketing-hero-image {
+  z-index: 0;
+  opacity: 0.36;
+  filter: saturate(0.85) contrast(1.06);
+}
+
+.marketing-hero-shade {
+  z-index: 1;
+  background: linear-gradient(90deg, rgba(5,5,10,0.96) 0%, rgba(5,5,10,0.78) 38%, rgba(5,5,10,0.42) 72%, rgba(5,5,10,0.82) 100%);
+}
+
+.marketing-hero > *:not(.marketing-hero-image):not(.marketing-hero-shade) {
+  z-index: 2;
+}
+
 .process-browser {
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.1);
