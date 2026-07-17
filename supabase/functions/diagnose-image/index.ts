@@ -222,10 +222,16 @@ function extractGeminiOutput(payload: unknown) {
   if (Array.isArray(steps)) {
     for (const step of steps) {
       const stepObj = step as Record<string, unknown>;
+      extractTextFromContent(stepObj.content, stepTexts);
+      extractTextFromContent(stepObj.outputs, stepTexts);
       extractTextFromContent(stepObj.model_output || stepObj.modelOutput, stepTexts);
     }
   }
   if (stepTexts.length) return stepTexts.join("\n");
+
+  const outputTexts: string[] = [];
+  extractTextFromContent(obj.outputs, outputTexts);
+  if (outputTexts.length) return outputTexts.join("\n");
 
   const candidateTexts: string[] = [];
   extractTextFromContent(obj.candidates, candidateTexts);
@@ -242,6 +248,10 @@ function parseModelJson(payload: unknown): GeminiDiagnosis {
     .replace(/^```\s*/i, "")
     .replace(/```$/i, "")
     .trim();
+
+  if (!rawText) {
+    throw new Error("Gemini returned an empty response. Please retake the photo with better lighting and try again.");
+  }
 
   const start = rawText.indexOf("{");
   const end = rawText.lastIndexOf("}");
