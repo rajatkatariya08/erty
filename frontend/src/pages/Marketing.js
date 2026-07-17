@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight, BadgeCheck, Bike, BookOpenText, Camera,
-  ChevronRight, ClipboardCheck, ExternalLink, HelpCircle, MapPin, PackageSearch,
+  ChevronRight, ClipboardCheck, HelpCircle, MapPin, PackageSearch,
   Play, ShieldCheck, Sparkles, UserCheck, WalletCards, WashingMachine, Wrench,
 } from "lucide-react";
 
@@ -152,7 +152,6 @@ function MarketingShell({ title, description, children }) {
               <Link to="/about" className="hover:text-white">About ERTY</Link>
               <Link to="/login" className="hover:text-white">Customer sign in</Link>
               <Link to="/technician/signup" className="hover:text-white">Become a technician</Link>
-              <a href="https://hoardigo.com/portal.html" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:text-white">Become a media partner <ExternalLink className="h-3 w-3" /></a>
             </div>
           </div>
           <div>
