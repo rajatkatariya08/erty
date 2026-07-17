@@ -32,6 +32,31 @@ const LANGUAGES = [
   { code: "Tamil",     label: "தமிழ்" },
 ];
 
+const MAX_IMAGE_EDGE = 1280;
+const DIAGNOSIS_IMAGE_QUALITY = 0.72;
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+async function resizeImageDataUrl(src) {
+  const img = await loadImage(src);
+  const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(img.width, img.height));
+  const width = Math.max(1, Math.round(img.width * scale));
+  const height = Math.max(1, Math.round(img.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+  return canvas.toDataURL("image/jpeg", DIAGNOSIS_IMAGE_QUALITY);
+}
+
 export default function AIDiagnosis() {
   const [sp] = useSearchParams();
   const navigate = useNavigate();
@@ -92,10 +117,11 @@ export default function AIDiagnosis() {
     if (!video || !canvas) return;
     const w = video.videoWidth || 720;
     const h = video.videoHeight || 960;
-    canvas.width = w;
-    canvas.height = h;
-    canvas.getContext("2d").drawImage(video, 0, 0, w, h);
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+    const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(w, h));
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL("image/jpeg", DIAGNOSIS_IMAGE_QUALITY);
     setSnapshot(dataUrl);
   };
 
@@ -103,7 +129,14 @@ export default function AIDiagnosis() {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => setSnapshot(reader.result);
+    reader.onload = async () => {
+      try {
+        const resized = await resizeImageDataUrl(reader.result);
+        setSnapshot(resized);
+      } catch {
+        toast.error("Could not read that photo. Please try another image.");
+      }
+    };
     reader.readAsDataURL(file);
   };
 

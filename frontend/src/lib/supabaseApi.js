@@ -527,7 +527,18 @@ async function post(path, payload = {}) {
       body: payload,
     });
     if (error) {
-      fail(error.message || "AI Lens function failed", error.context?.status || 500);
+      let detail = error.message || "AI Lens function failed";
+      if (error.name === "FunctionsFetchError") {
+        detail = "AI Lens could not reach Supabase. Please sign in again, open the site in Chrome/Safari, and try a smaller photo.";
+      } else if (error.context?.clone) {
+        try {
+          const body = await error.context.clone().json();
+          detail = body.error || body.message || detail;
+        } catch {
+          // Keep the original Supabase error message.
+        }
+      }
+      fail(detail, error.context?.status || 500);
     }
     if (!data) fail("AI Lens returned no diagnosis", 500);
     if (data.error) fail(data.error, 500);

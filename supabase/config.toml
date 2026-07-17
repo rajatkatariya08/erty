@@ -1,2 +1,2 @@
 [functions.diagnose-image]
-verify_jwt = true
+verify_jwt = false
