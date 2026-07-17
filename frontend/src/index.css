@@ -192,17 +192,23 @@ h1, h2, h3, h4, h5, h6, .font-display {
 
 .marketing-hero-image {
   z-index: 0;
-  opacity: 0.36;
-  filter: saturate(0.85) contrast(1.06);
+  opacity: 0.2;
+  object-position: 82% center;
+  filter: saturate(0.65) contrast(1.08);
 }
 
 .marketing-hero-shade {
   z-index: 1;
-  background: linear-gradient(90deg, rgba(5,5,10,0.96) 0%, rgba(5,5,10,0.78) 38%, rgba(5,5,10,0.42) 72%, rgba(5,5,10,0.82) 100%);
+  background: linear-gradient(90deg, rgba(5,5,10,0.98) 0%, rgba(5,5,10,0.9) 44%, rgba(5,5,10,0.66) 78%, rgba(5,5,10,0.88) 100%);
 }
 
 .marketing-hero > *:not(.marketing-hero-image):not(.marketing-hero-shade) {
   z-index: 2;
+}
+
+@media (max-width: 767px) {
+  .marketing-hero-image { display: none; }
+  .marketing-hero-shade { background: linear-gradient(180deg, rgba(5,5,10,0.22), rgba(5,5,10,0.82) 70%, #05050A 100%); }
 }
 
 .process-browser {
