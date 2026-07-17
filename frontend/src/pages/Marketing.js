@@ -122,6 +122,12 @@ function MarketingShell({ title, description, children }) {
           <Link to="/login" className="btn-neon-lime hidden rounded-full px-4 py-2 text-sm font-bold sm:inline-flex">Book now</Link>
         </div>
       </header>
+      <nav className="relative z-10 flex gap-5 overflow-x-auto px-5 pb-3 text-xs text-white/60 sm:hidden hide-scrollbar" aria-label="Mobile marketing navigation">
+        <Link to="/services" className="shrink-0 hover:text-white">Services</Link>
+        <Link to="/ai-diagnosis" className="shrink-0 hover:text-white">AI Lens</Link>
+        <Link to="/pricing" className="shrink-0 hover:text-white">Pricing</Link>
+        <Link to="/blog" className="shrink-0 hover:text-white">Blog</Link>
+      </nav>
       <main className="relative z-10 mx-auto max-w-6xl px-5 pb-20 sm:px-8">{children}</main>
       <footer className="relative z-10 border-t border-white/10 bg-[#07070D]/80">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">

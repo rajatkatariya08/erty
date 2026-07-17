@@ -84,7 +84,7 @@ function PillarTile({ cat, i, onClick }) {
       transition={{ delay: i * 0.05 }}
       data-testid={`pillar-${cat.id}`}
       className={`card-fix relative overflow-hidden p-5 text-left transition-colors hover:border-white/25 ${
-        large ? "col-span-2 min-h-[200px]" : "min-h-[176px]"
+        large ? "col-span-2 min-h-[200px] lg:col-span-2" : "min-h-[176px] lg:col-span-1"
       } ${cat.coming_soon ? "cursor-default" : "cursor-pointer"}`}
       style={{ boxShadow: meta.glow }}
     >
@@ -184,7 +184,7 @@ function HowItWorks() {
         title="Book in four steps"
         body="Designed for quick home repairs without the back-and-forth calls."
       />
-      <div className="grid gap-3 sm:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map(({ title, body, Icon }, index) => (
           <div key={title} className="card-fix p-4">
             <div className="relative">
@@ -330,7 +330,7 @@ export default function HomePage() {
             </button>
           }
         />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
           {popularServices.map((svc) => (
             <PopularServiceCard key={svc.service_id} svc={svc} onOpen={() => openService(svc)} />
           ))}
@@ -343,7 +343,7 @@ export default function HomePage() {
           title="Choose the kind of help"
           body="Repair, install, service, or ask us for a custom task."
         />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {categories.map((c, i) => (
             <PillarTile
               key={c.id}

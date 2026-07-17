@@ -36,11 +36,11 @@ export default function Layout() {
   ];
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
       <div className="bg-mesh" />
 
       {/* Top header */}
-      <header className="relative z-20 max-w-3xl mx-auto px-5 sm:px-8 pt-5 flex items-center justify-between">
+      <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 lg:pt-7">
         <Link to="/" className="font-display font-black text-xl tracking-tight" data-testid="brand">
           ER<span className="neon-text-lime">TY</span>
         </Link>
@@ -67,22 +67,22 @@ export default function Layout() {
         </div>
       </header>
 
-      <main className="relative z-10 pb-28 max-w-3xl mx-auto px-5 sm:px-8 pt-6">
+      <main className="relative z-10 mx-auto max-w-6xl px-5 pb-32 pt-6 sm:px-8 sm:pt-8 lg:pb-16">
         <Outlet />
       </main>
 
       <nav
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 glass rounded-full px-2 py-2 flex items-center gap-1 shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+        className="app-bottom-nav fixed bottom-3 left-1/2 z-50 flex max-w-[calc(100vw-1rem)] -translate-x-1/2 items-center gap-1 rounded-full px-2 pt-2 shadow-[0_10px_40px_rgba(0,0,0,0.5)] sm:bottom-5"
         data-testid="bottom-nav"
       >
         {tabs.map(t => (
           <NavLink
             key={t.to}
             to={t.to}
-            end={t.to === "/"}
+            end={t.to === "/app"}
             data-testid={t.testid}
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold transition-colors ${
+              `flex items-center gap-2 rounded-full px-3 py-2.5 text-xs font-semibold transition-colors sm:px-4 ${
                 isActive
                   ? "bg-[#39FF14] text-[#05050A] shadow-[0_0_20px_rgba(57,255,20,0.4)]"
                   : "text-white/70 hover:text-white"
@@ -90,7 +90,7 @@ export default function Layout() {
             }
           >
             <t.icon className="h-4 w-4" />
-            <span className="hidden sm:inline">{t.label}</span>
+            <span className="hidden md:inline">{t.label}</span>
           </NavLink>
         ))}
       </nav>

@@ -115,7 +115,7 @@ export default function CategoryPage() {
 
   return (
     <div className="space-y-6 min-h-[calc(100vh-140px)]">
-      <button onClick={() => navigate("/")} className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white" data-testid="back-home">
+      <button onClick={() => navigate("/app")} className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white" data-testid="back-home">
         <ArrowLeft className="h-4 w-4" /> Back
       </button>
       <h1 className="font-display text-4xl font-black tracking-tight" data-testid="category-title">{t(labelKey)}</h1>
@@ -125,7 +125,7 @@ export default function CategoryPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
         {services.map((s, i) => (
           <ServiceTile key={s.service_id} svc={s} index={i} showBookingFee={showBookingFee} />
         ))}

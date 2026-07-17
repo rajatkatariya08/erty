@@ -346,7 +346,7 @@ export default function AIDiagnosis() {
           </h1>
           <p className="mt-2 text-sm text-white/60 max-w-md">Pick a category so our AI knows what to look for.</p>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {CATEGORIES.map(c => (
             <button
               key={c.id}
@@ -369,7 +369,7 @@ export default function AIDiagnosis() {
   // ---------- CAMERA STEP ----------
   if (step === "camera") {
     return (
-      <div className="space-y-4">
+      <div className="mx-auto max-w-3xl space-y-4 xl:max-w-4xl">
         <button onClick={() => setStep("category")} className="inline-flex items-center gap-2 text-sm text-white/60" data-testid="back-cat">
           <ArrowLeft className="h-4 w-4" /> Change category
         </button>
@@ -574,7 +574,7 @@ export default function AIDiagnosis() {
 
   // ---------- RESULT STEP ----------
   return (
-    <div className="space-y-5">
+    <div className="mx-auto max-w-5xl space-y-5">
       {diagnosis?.test_mode && (
         <div
           data-testid="test-mode-banner"

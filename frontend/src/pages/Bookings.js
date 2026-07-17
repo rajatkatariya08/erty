@@ -42,7 +42,7 @@ export default function Bookings() {
           <ClipboardList className="mx-auto h-10 w-10 text-white/40" />
           <div className="mt-3 font-semibold">No bookings yet</div>
           <div className="text-sm text-white/50 mt-1">Book a service or run an AI diagnosis to get started.</div>
-          <Link to="/" data-testid="explore-btn" className="btn-neon-blue inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-sm mt-5">
+          <Link to="/app" data-testid="explore-btn" className="btn-neon-blue inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-sm mt-5">
             Explore services <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
