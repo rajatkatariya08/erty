@@ -21,11 +21,11 @@ const FALLBACK_CATEGORIES = [
 ];
 
 const PILLAR_META = {
-  home_appliances: { Ic: WashingMachine, blob: "#FF007F", glow: "0 0 44px rgba(255,0,127,0.34)" },
-  handyman: { Ic: Hammer, blob: "#39FF14", glow: "0 0 44px rgba(57,255,20,0.32)" },
-  car_and_bike: { Ic: Car, blob: "#00E5FF", glow: "0 0 44px rgba(0,229,255,0.34)" },
-  permanent_drivers: { Ic: UserRoundCog, blob: "#FFEA00", glow: "0 0 40px rgba(255,234,0,0.28)" },
-  domestic_maids: { Ic: SparklesIcon, blob: "#E879F9", glow: "0 0 40px rgba(232,121,249,0.28)" },
+  home_appliances: { Ic: WashingMachine, blob: "#FF007F", glow: "0 0 44px rgba(255,0,127,0.34)", image: "/images/category-home-appliances.png" },
+  handyman: { Ic: Hammer, blob: "#39FF14", glow: "0 0 44px rgba(57,255,20,0.32)", image: "/images/category-handyman.png" },
+  car_and_bike: { Ic: Car, blob: "#00E5FF", glow: "0 0 44px rgba(0,229,255,0.34)", image: "/images/category-car-bike.png" },
+  permanent_drivers: { Ic: UserRoundCog, blob: "#FFEA00", glow: "0 0 40px rgba(255,234,0,0.28)", image: "/images/category-drivers.png" },
+  domestic_maids: { Ic: SparklesIcon, blob: "#E879F9", glow: "0 0 40px rgba(232,121,249,0.28)", image: "/images/category-maids.png" },
 };
 
 const TRUST_ITEMS = [
@@ -88,6 +88,8 @@ function PillarTile({ cat, i, onClick }) {
       } ${cat.coming_soon ? "cursor-default" : "cursor-pointer"}`}
       style={{ boxShadow: meta.glow }}
     >
+      <img src={meta.image} alt="" aria-hidden="true" className="pillar-image" />
+      <div className="pillar-image-shade" />
       <div className="blob" style={{ background: meta.blob, top: -60, right: -40, opacity: 0.45 }} />
       <div className="relative flex h-full flex-col">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.06]" style={{ color: meta.blob }}>
