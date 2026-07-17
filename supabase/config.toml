@@ -3,3 +3,6 @@ verify_jwt = false
 
 [functions.ai-lens-chat]
 verify_jwt = false
+
+[functions.part-price-check]
+verify_jwt = false

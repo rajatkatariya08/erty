@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Camera, ScanLine, Sparkles, CircleCheck, ArrowLeft, RefreshCw, ArrowRight, Radio, Send, Languages } from "lucide-react";
+import { Camera, ScanLine, Sparkles, CircleCheck, ArrowLeft, RefreshCw, ArrowRight, Radio, Send, Languages, PackageSearch, ExternalLink, IndianRupee } from "lucide-react";
 import { api, API } from "../lib/api";
 import { isSupabaseConfigured } from "../lib/supabase";
 import { toast } from "sonner";
@@ -34,6 +34,7 @@ const LANGUAGES = [
 
 const MAX_IMAGE_EDGE = 1280;
 const DIAGNOSIS_IMAGE_QUALITY = 0.72;
+const MARKET_LOCATION = "Gurugram, Haryana, India";
 
 function loadImage(src) {
   return new Promise((resolve, reject) => {
@@ -57,6 +58,36 @@ async function resizeImageDataUrl(src) {
   return canvas.toDataURL("image/jpeg", DIAGNOSIS_IMAGE_QUALITY);
 }
 
+function isPartPriceQuestion(message = "") {
+  return /\b(part|parts|spare|replace|replacement|price|cost|estimate|model|quote|overcharge|market)\b/i.test(message);
+}
+
+function formatMoney(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount <= 0) return "";
+  return `INR ${amount.toLocaleString("en-IN")}`;
+}
+
+function formatPartPrice(part) {
+  if (part?.price_min && part?.price_max) {
+    return `${formatMoney(part.price_min)} - ${formatMoney(part.price_max)}`;
+  }
+  if (part?.price_min) return `From ${formatMoney(part.price_min)}`;
+  return "Market price not found yet";
+}
+
+function formatPartEstimateForChat(estimate) {
+  if (!estimate) return "I could not check part prices yet.";
+  const model = estimate.model_number ? ` (${estimate.model_number})` : "";
+  const header = estimate.needs_market_api
+    ? "I can identify likely parts, but live market prices need the SerpApi key in Supabase."
+    : `Market estimate for ${estimate.appliance_type || "this appliance"}${model}:`;
+  const rows = (estimate.parts || []).slice(0, 4).map((part) => (
+    `${part.part_name}: ${formatPartPrice(part)}. ${part.reason}`
+  ));
+  return [header, ...rows, estimate.disclaimer].filter(Boolean).join("\n");
+}
+
 export default function AIDiagnosis() {
   const [sp] = useSearchParams();
   const navigate = useNavigate();
@@ -69,6 +100,9 @@ export default function AIDiagnosis() {
   const [diagnosis, setDiagnosis] = useState(null);
   const [service, setService] = useState(null); // suggested service to book
   const [language, setLanguage] = useState("English");
+  const [modelDetails, setModelDetails] = useState("");
+  const [partEstimate, setPartEstimate] = useState(null);
+  const [partEstimateLoading, setPartEstimateLoading] = useState(false);
 
   // Live streaming chat state
   const [liveOpen, setLiveOpen] = useState(false);
@@ -143,11 +177,13 @@ export default function AIDiagnosis() {
   const analyze = async () => {
     if (!snapshot) return;
     setStep("analyzing");
+    setPartEstimate(null);
     try {
       const { data } = await api.post("/diagnosis", {
         category,
         image_base64: snapshot,
         user_note: note,
+        model_details: modelDetails,
         language,
       });
       setDiagnosis(data);
@@ -163,6 +199,33 @@ export default function AIDiagnosis() {
     } catch (e) {
       toast.error(e.response?.data?.detail || "AI analysis failed");
       setStep("camera");
+    }
+  };
+
+  const checkPartPrices = async (frame = snapshot) => {
+    if (!frame && !diagnosis?.issue_summary && !modelDetails.trim()) {
+      toast.error("Take a photo, run diagnosis, or add brand/model details first");
+      return null;
+    }
+
+    setPartEstimateLoading(true);
+    try {
+      const { data } = await api.post("/parts/estimate", {
+        category,
+        image_base64: frame,
+        user_note: note,
+        model_details: modelDetails,
+        diagnosis,
+        location: MARKET_LOCATION,
+        language,
+      });
+      setPartEstimate(data);
+      return data;
+    } catch (e) {
+      toast.error(e.response?.data?.detail || "Part price check failed");
+      throw e;
+    } finally {
+      setPartEstimateLoading(false);
     }
   };
 
@@ -182,19 +245,29 @@ export default function AIDiagnosis() {
     }
     if (!frame) { toast.error("Take a photo first"); return; }
 
+    const wantsPartPrices = isPartPriceQuestion(message);
     setLiveOpen(true);
     setLiveStreaming(true);
     setLiveTranscript(prev => prev + (prev ? "\n\n" : "") + `You: ${message || "(scan)"}\n\nAI: `);
 
     if (isSupabaseConfigured) {
       try {
-        const { data } = await api.post("/diagnosis/chat", {
-          category,
-          image_base64: frame,
-          message: message || "Scan this photo and guide me.",
-          language,
-        });
-        const aiText = data.message || "I could not generate a live chat response. Please try again.";
+        let aiText = "";
+        if (wantsPartPrices) {
+          const estimate = await checkPartPrices(frame);
+          aiText = formatPartEstimateForChat(estimate);
+        } else {
+          const { data } = await api.post("/diagnosis/chat", {
+            category,
+            image_base64: frame,
+            message: message || "Scan this photo and guide me.",
+            user_note: note,
+            model_details: modelDetails,
+            diagnosis,
+            language,
+          });
+          aiText = data.message || "I could not generate a live chat response. Please try again.";
+        }
         for (const word of aiText.split(" ")) {
           await new Promise(resolve => setTimeout(resolve, 25));
           setLiveTranscript(prev => prev + word + " ");
@@ -375,6 +448,14 @@ export default function AIDiagnosis() {
           className="w-full rounded-2xl bg-[#121217] border border-white/10 p-4 text-sm text-white placeholder:text-white/30 focus:border-[#00E5FF] focus:outline-none"
         />
 
+        <input
+          data-testid="model-details"
+          value={modelDetails}
+          onChange={(e) => setModelDetails(e.target.value)}
+          placeholder="Brand/model number (optional, helps part price estimates)"
+          className="w-full rounded-2xl bg-[#121217] border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[#00E5FF] focus:outline-none"
+        />
+
         {/* Language selector */}
         <div>
           <div className="flex items-center gap-2 text-sm text-white/70 mb-2">
@@ -413,7 +494,7 @@ export default function AIDiagnosis() {
           data-testid="live-chat-btn"
           className="rounded-full glass px-6 py-3.5 font-semibold text-sm w-full inline-flex items-center justify-center gap-2 text-white"
         >
-          <Radio className="h-4 w-4 text-[#00E5FF]" /> Live AI Chat (streaming)
+          <Radio className="h-4 w-4 text-[#00E5FF]" /> AI Photo Chat + Part Prices
         </button>
 
         {/* Live streaming panel */}
@@ -428,7 +509,7 @@ export default function AIDiagnosis() {
             >
               <div className="flex items-center justify-between">
                 <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#00E5FF]">
-                  <Radio className="h-3.5 w-3.5" /> Live · Gemini stream
+                  <Radio className="h-3.5 w-3.5" /> AI Photo Chat
                 </div>
                 <button
                   onClick={() => { liveAbortRef.current?.abort(); setLiveOpen(false); setLiveTranscript(""); }}
@@ -465,7 +546,7 @@ export default function AIDiagnosis() {
                 </button>
               </div>
               <div className="text-[10px] uppercase tracking-widest text-white/40">
-                Tip: retake a fresh photo above, then send another message to stream a new response.
+                Tip: ask "part price" after adding the brand/model if you can.
               </div>
             </motion.div>
           )}
@@ -538,6 +619,92 @@ export default function AIDiagnosis() {
         )}
       </div>
 
+      <div className="card-fix p-6 space-y-4" data-testid="part-estimate-card">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#00E5FF]">
+              <PackageSearch className="h-4 w-4" /> Part price awareness
+            </div>
+            <p className="mt-2 text-sm text-white/60">
+              Add the brand/model if you know it. The AI checks likely replacement parts so customers understand the rough market range before a technician visit.
+            </p>
+          </div>
+          <button
+            onClick={() => checkPartPrices(snapshot)}
+            disabled={partEstimateLoading}
+            data-testid="part-estimate-btn"
+            className="rounded-full glass px-5 py-3 text-sm font-semibold text-white inline-flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            <IndianRupee className="h-4 w-4 text-[#39FF14]" />
+            {partEstimateLoading ? "Checking..." : "Check part prices"}
+          </button>
+        </div>
+
+        {partEstimate?.needs_market_api && (
+          <div className="rounded-2xl border border-[#FFEA00]/30 bg-[#FFEA00]/10 px-4 py-3 text-xs text-[#FFEA00]">
+            Live market search is not connected yet. This still shows likely parts, but price ranges will appear after the market-search key is added in Supabase.
+          </div>
+        )}
+
+        {partEstimate && (
+          <div className="space-y-4">
+            <div className="rounded-2xl bg-[#0B0B10] border border-white/5 p-4 text-sm text-white/75">
+              <div className="font-semibold text-white">{partEstimate.summary}</div>
+              <div className="mt-1 text-xs text-white/45">
+                {partEstimate.appliance_type}
+                {partEstimate.brand ? ` / ${partEstimate.brand}` : ""}
+                {partEstimate.model_number ? ` / ${partEstimate.model_number}` : ""}
+                {partEstimate.location ? ` / ${partEstimate.location}` : ""}
+              </div>
+            </div>
+
+            <div className="divide-y divide-white/10">
+              {(partEstimate.parts || []).map((part, idx) => (
+                <div key={`${part.part_name}-${idx}`} className="py-4 first:pt-0 last:pb-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div>
+                      <div className="font-display text-lg font-bold text-white">{part.part_name}</div>
+                      <div className="mt-1 text-sm text-white/60">{part.reason}</div>
+                    </div>
+                    <div className="shrink-0 rounded-full bg-[#39FF14]/10 px-3 py-1 text-sm font-semibold text-[#39FF14]">
+                      {formatPartPrice(part)}
+                    </div>
+                  </div>
+                  {!!part.sample_count && (
+                    <div className="mt-2 text-xs uppercase tracking-widest text-white/40">
+                      Based on {part.sample_count} market result{part.sample_count === 1 ? "" : "s"}
+                    </div>
+                  )}
+                  {!!part.sources?.length && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {part.sources.slice(0, 3).map((source, sourceIdx) => (
+                        source.link ? (
+                          <a
+                            key={`${source.link}-${sourceIdx}`}
+                            href={source.link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex max-w-full items-center gap-1 rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 hover:text-white"
+                          >
+                            <span className="truncate max-w-[150px]">{source.source || source.title || "Source"}</span>
+                            {source.price ? <span className="text-white/40">{source.price}</span> : null}
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        ) : null
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="text-[11px] leading-relaxed text-white/45">
+              {partEstimate.disclaimer}
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="flex flex-col sm:flex-row gap-3">
         {service ? (
           <Link
@@ -556,7 +723,7 @@ export default function AIDiagnosis() {
           </button>
         )}
         <button
-          onClick={() => { setDiagnosis(null); setSnapshot(null); setStep("camera"); }}
+          onClick={() => { setDiagnosis(null); setPartEstimate(null); setSnapshot(null); setStep("camera"); }}
           className="rounded-full glass px-6 py-4 font-semibold text-sm text-white"
           data-testid="new-diagnosis-btn"
         >
