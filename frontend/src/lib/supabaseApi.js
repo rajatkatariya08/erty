@@ -545,6 +545,30 @@ async function post(path, payload = {}) {
     return response(data);
   }
 
+  if (path === "/diagnosis/chat") {
+    await currentUser();
+    const { data, error } = await supabase.functions.invoke("ai-lens-chat", {
+      body: payload,
+    });
+    if (error) {
+      let detail = error.message || "AI chat failed";
+      if (error.name === "FunctionsFetchError") {
+        detail = "AI chat could not reach Supabase. Please sign in again, open the site in Chrome/Safari, and try a smaller photo.";
+      } else if (error.context?.clone) {
+        try {
+          const body = await error.context.clone().json();
+          detail = body.error || body.message || detail;
+        } catch {
+          // Keep the original Supabase error message.
+        }
+      }
+      fail(detail, error.context?.status || 500);
+    }
+    if (!data) fail("AI chat returned no response", 500);
+    if (data.error) fail(data.error, 500);
+    return response(data);
+  }
+
   if (path === "/notifications/read-all") {
     const user = await currentUser();
     const { error } = await supabase.from("notifications").update({ read: true }).eq("user_id", user.user_id);

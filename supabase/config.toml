@@ -1,2 +1,5 @@
 [functions.diagnose-image]
 verify_jwt = false
+
+[functions.ai-lens-chat]
+verify_jwt = false

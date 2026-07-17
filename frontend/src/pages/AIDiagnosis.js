@@ -173,9 +173,11 @@ export default function AIDiagnosis() {
     if (!frame && videoRef.current) {
       const v = videoRef.current, c = canvasRef.current;
       if (v && c && v.videoWidth) {
-        c.width = v.videoWidth; c.height = v.videoHeight;
-        c.getContext("2d").drawImage(v, 0, 0);
-        frame = c.toDataURL("image/jpeg", 0.75);
+        const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(v.videoWidth, v.videoHeight));
+        c.width = Math.round(v.videoWidth * scale);
+        c.height = Math.round(v.videoHeight * scale);
+        c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+        frame = c.toDataURL("image/jpeg", DIAGNOSIS_IMAGE_QUALITY);
       }
     }
     if (!frame) { toast.error("Take a photo first"); return; }
@@ -186,17 +188,13 @@ export default function AIDiagnosis() {
 
     if (isSupabaseConfigured) {
       try {
-        const { data } = await api.post("/diagnosis", {
+        const { data } = await api.post("/diagnosis/chat", {
           category,
           image_base64: frame,
-          user_note: message || "Scan this photo and guide me.",
+          message: message || "Scan this photo and guide me.",
           language,
         });
-        const aiText = [
-          data.issue_summary,
-          ...(data.detected_problems || []),
-          data.ai_notes,
-        ].filter(Boolean).join("\n");
+        const aiText = data.message || "I could not generate a live chat response. Please try again.";
         for (const word of aiText.split(" ")) {
           await new Promise(resolve => setTimeout(resolve, 25));
           setLiveTranscript(prev => prev + word + " ");
