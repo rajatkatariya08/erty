@@ -21,12 +21,22 @@ const ICON_MAP = {
   "car": Car, "bike": Bike, "battery-charging": BatteryCharging,
 };
 
+const SERVICE_IMAGE_MAP = {
+  svc_ac_repair: "/images/service-ac-repair.png",
+  svc_ro_service: "/images/service-ro-service.png",
+  svc_washing_machine: "/images/service-washing-machine.png",
+  svc_tv_mounting: "/images/service-tv-mounting.png",
+  svc_fan_install: "/images/service-ceiling-fan.png",
+  svc_bathroom_fittings: "/images/service-bathroom-fittings.png",
+};
+
 function tileColor(idx) {
   return ["#FF007F", "#00E5FF", "#39FF14", "#FFEA00"][idx % 4];
 }
 
 function ServiceTile({ svc, index, showBookingFee }) {
   const Ic = ICON_MAP[svc.icon] || Wrench;
+  const image = SERVICE_IMAGE_MAP[svc.service_id] || svc.image_url;
   const color = tileColor(index);
   const { t } = useLang();
   const savings = svc.market_max && svc.market_max > svc.base_price
@@ -38,6 +48,8 @@ function ServiceTile({ svc, index, showBookingFee }) {
       data-testid={`service-tile-${svc.service_id}`}
       className="card-fix block h-full p-4 hover:border-white/25 transition-colors relative overflow-hidden"
     >
+      {image && <img src={image} alt="" aria-hidden="true" className="service-tile-image" />}
+      {image && <div className="service-tile-image-shade" />}
       <div className="blob" style={{ background: color, top: -40, right: -30, opacity: 0.4 }} />
       <div className="relative">
         <div className="h-10 w-10 rounded-2xl bg-white/[0.06] flex items-center justify-center" style={{ color }}>

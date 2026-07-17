@@ -181,6 +181,28 @@ h1, h2, h3, h4, h5, h6, .font-display {
 
 .card-fix:hover .pillar-image { opacity: 0.56; transform: scale(1.04); }
 
+.service-tile-image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.34;
+  filter: saturate(0.78) contrast(1.05);
+  transition: transform 300ms ease, opacity 300ms ease;
+}
+
+.service-tile-image-shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(5,5,10,0.12), rgba(5,5,10,0.82) 70%, rgba(5,5,10,0.98));
+}
+
+.card-fix:hover .service-tile-image { opacity: 0.5; transform: scale(1.04); }
+
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
