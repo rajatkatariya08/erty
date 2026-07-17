@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight, BadgeCheck, Bike, BookOpenText, Camera,
   ChevronRight, ClipboardCheck, HelpCircle, MapPin, PackageSearch,
-  Play, ShieldCheck, Sparkles, UserCheck, WalletCards, WashingMachine, Wrench,
+  Pause, Play, ShieldCheck, Sparkles, UserCheck, WalletCards, WashingMachine, Wrench,
 } from "lucide-react";
 
 const SERVICE_GROUPS = [
@@ -31,10 +31,38 @@ const SERVICE_GROUPS = [
 ];
 
 const WORK_STEPS = [
-  { title: "Snap or choose a service", body: "Start with AI Lens or directly pick the repair you need.", Icon: Camera },
-  { title: "Understand the estimate", body: "See likely issues, severity, visit cost, and possible replacement parts.", Icon: ClipboardCheck },
-  { title: "Book a verified technician", body: "Choose a slot and let ERTY route the job to the right service flow.", Icon: UserCheck },
-  { title: "Pay after service", body: "Get the work done first, then review the visit and complete payment.", Icon: WalletCards },
+  {
+    eyebrow: "AI LENS",
+    title: "Show us the problem",
+    body: "Snap a clear photo, add the appliance model, or describe what is going wrong.",
+    Icon: Camera,
+    accent: "#00E5FF",
+    screen: "scan",
+  },
+  {
+    eyebrow: "DIAGNOSIS",
+    title: "Understand the likely issue",
+    body: "Get a plain-language diagnosis, severity, confidence level, and an initial repair range.",
+    Icon: ClipboardCheck,
+    accent: "#39FF14",
+    screen: "diagnosis",
+  },
+  {
+    eyebrow: "PRICE AWARENESS",
+    title: "Know what parts may cost",
+    body: "Compare indicative online market prices before a technician quotes replacement parts.",
+    Icon: PackageSearch,
+    accent: "#FFEA00",
+    screen: "parts",
+  },
+  {
+    eyebrow: "BOOKING",
+    title: "Book and track the visit",
+    body: "Choose a slot, follow job status, and pay only after the service is completed.",
+    Icon: UserCheck,
+    accent: "#FF007F",
+    screen: "booking",
+  },
 ];
 
 const FEATURES = [
@@ -238,6 +266,117 @@ function ScanIcon() {
   );
 }
 
+function ProcessScreen({ step }) {
+  if (step.screen === "scan") {
+    return (
+      <div className="process-screen process-screen-scan">
+        <div className="process-live"><span className="status-dot" /> Camera ready</div>
+        <div className="process-scan-frame">
+          <WashingMachine className="h-16 w-16 text-white/75" />
+          <span>Centre the appliance or issue</span>
+        </div>
+        <div className="process-model">Model details improve accuracy</div>
+      </div>
+    );
+  }
+
+  if (step.screen === "diagnosis") {
+    return (
+      <div className="process-screen">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <div className="process-label">LIKELY ISSUE</div>
+            <div className="mt-2 font-display text-2xl font-black">Cooling airflow restricted</div>
+          </div>
+          <div className="process-score">86%</div>
+        </div>
+        <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full w-[86%] rounded-full bg-[#39FF14]" /></div>
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="process-stat"><span>Severity</span><strong className="text-[#FFEA00]">Medium</strong></div>
+          <div className="process-stat"><span>Repair range</span><strong className="text-[#39FF14]">INR 799-1,999</strong></div>
+        </div>
+        <div className="mt-3 rounded-xl border border-white/10 bg-black/25 p-3 text-xs leading-5 text-white/55">AI guidance only. A technician confirms the final fault on inspection.</div>
+      </div>
+    );
+  }
+
+  if (step.screen === "parts") {
+    return (
+      <div className="process-screen">
+        <div className="flex items-center justify-between"><div><div className="process-label">POSSIBLE PARTS</div><div className="mt-1 font-display text-xl font-black">Market price check</div></div><PackageSearch className="h-8 w-8 text-[#FFEA00]" /></div>
+        <div className="mt-5 space-y-2">
+          <div className="process-part"><span>AC capacitor</span><strong>INR 450-900</strong></div>
+          <div className="process-part"><span>Fan motor</span><strong>INR 1,800-3,400</strong></div>
+          <div className="process-part"><span>Air filter set</span><strong>INR 350-750</strong></div>
+        </div>
+        <div className="mt-4 flex items-center gap-2 text-xs text-white/50"><BadgeCheck className="h-4 w-4 text-[#39FF14]" /> Indicative online prices, checked before booking</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="process-screen">
+      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#39FF14] text-[#05050A] shadow-[0_0_30px_rgba(57,255,20,0.4)]"><BadgeCheck className="h-8 w-8" /></div>
+      <div className="mt-4 text-center font-display text-2xl font-black">Visit confirmed</div>
+      <div className="mx-auto mt-2 max-w-xs text-center text-sm text-white/55">A verified appliance technician is assigned to your request.</div>
+      <div className="mt-6 grid grid-cols-2 gap-3">
+        <div className="process-stat"><span>Arrival</span><strong>Today, 4-5 PM</strong></div>
+        <div className="process-stat"><span>Payment</span><strong className="text-[#00E5FF]">After service</strong></div>
+      </div>
+    </div>
+  );
+}
+
+function ProcessShowcase() {
+  const [active, setActive] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const step = WORK_STEPS[active];
+
+  useEffect(() => {
+    if (!playing) return undefined;
+    const timer = window.setTimeout(() => setActive((current) => (current + 1) % WORK_STEPS.length), 4800);
+    return () => window.clearTimeout(timer);
+  }, [active, playing]);
+
+  return (
+    <section className="py-14" aria-labelledby="erty-process-title">
+      <SectionTitle kicker="How ERTY works" title="From problem to repaired, with no guesswork" body="Follow one clear journey from the first photo to a completed doorstep visit." />
+      <div className="process-showcase">
+        <div className="process-browser">
+          <div className="process-browser-bar">
+            <div className="flex gap-1.5" aria-hidden="true"><span /><span /><span /></div>
+            <div className="process-address"><ShieldCheck className="h-3.5 w-3.5 text-[#39FF14]" /> erty.in / your-repair</div>
+          </div>
+          <div className="process-stage" key={step.screen} style={{ "--process-accent": step.accent }}>
+            <ProcessScreen step={step} />
+          </div>
+          <div className="process-caption">
+            <div className="process-number">0{active + 1}</div>
+            <div>
+              <div className="text-[11px] font-bold tracking-[0.18em]" style={{ color: step.accent }}>STEP 0{active + 1} / {step.eyebrow}</div>
+              <h3 id="erty-process-title" className="mt-1 font-display text-2xl font-black">{step.title}</h3>
+              <p className="mt-1 max-w-xl text-sm leading-6 text-white/55">{step.body}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="process-controls">
+          <button type="button" onClick={() => setPlaying((value) => !value)} className="process-play" aria-label={playing ? "Pause process animation" : "Play process animation"}>
+            {playing ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5 fill-current" />}
+          </button>
+          <div className="process-progress">
+            {WORK_STEPS.map((item, index) => (
+              <button key={item.title} type="button" onClick={() => setActive(index)} className={index === active ? "is-active" : index < active ? "is-complete" : ""} aria-label={`Show step ${index + 1}: ${item.title}`}>
+                <span key={`${active}-${playing}`} className={index === active && playing ? "is-running" : ""} />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function MarketingHome() {
   return (
     <MarketingShell
@@ -274,23 +413,7 @@ export function MarketingHome() {
         <HomePreviewCard />
       </section>
 
-      <section className="py-12">
-        <SectionTitle kicker="How it works" title="From confusion to booked repair" body="ERTY gives customers a clearer path before the technician arrives." />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {WORK_STEPS.map(({ title, body, Icon }, index) => (
-            <div key={title} className="card-fix p-5">
-              <div className="relative">
-                <div className="mb-5 flex items-center justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.06] text-[#39FF14]"><Icon className="h-5 w-5" /></div>
-                  <div className="font-display text-3xl font-black text-white/10">0{index + 1}</div>
-                </div>
-                <h3 className="font-display text-xl font-black">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-white/55">{body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ProcessShowcase />
 
       <section className="grid gap-6 py-12 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
