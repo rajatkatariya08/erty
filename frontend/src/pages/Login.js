@@ -111,7 +111,6 @@ export default function Login() {
           className="mt-6 flex flex-wrap gap-4 text-xs text-white/40"
         >
           <a href="/technician/login" data-testid="link-tech-login" className="text-[#39FF14] hover:text-white">Technician sign-in {"\u2192"}</a>
-          <a href="/admin/login" data-testid="link-admin-login" className="text-[#FFEA00] hover:text-white">Admin sign-in {"\u2192"}</a>
         </motion.div>
 
         <div className="mt-14 grid w-full max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">

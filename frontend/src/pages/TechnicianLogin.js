@@ -77,8 +77,6 @@ export default function TechnicianLogin() {
           </div>
           <div className="text-center text-xs text-white/40">
             Not a technician? <Link to="/login" className="text-white/70 hover:text-white">Customer sign-in</Link>
-            <span className="mx-2">{"\u00b7"}</span>
-            <Link to="/admin/login" className="text-[#FFEA00] hover:text-white">Admin sign-in</Link>
           </div>
         </motion.div>
       </div>
