@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /admin
+Disallow: /admin/login
+Disallow: /technician
+Disallow: /technician/login
+Disallow: /technician/signup
+Disallow: /profile
+Disallow: /bookings
+Disallow: /diagnose
+Disallow: /book/
+Disallow: /service/
+
+Sitemap: https://erty.in/sitemap.xml

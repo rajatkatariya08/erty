@@ -125,6 +125,14 @@ const SERVICE_PAGES = {
 
 function setSeo(title, description) {
   document.title = title;
+  const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement("link");
+    canonical.setAttribute("rel", "canonical");
+    document.head.appendChild(canonical);
+  }
+  canonical.setAttribute("href", canonicalUrl);
   let meta = document.querySelector('meta[name="description"]');
   if (!meta) {
     meta = document.createElement("meta");
@@ -132,6 +140,35 @@ function setSeo(title, description) {
     document.head.appendChild(meta);
   }
   meta.setAttribute("content", description);
+  const setMeta = (selector, attribute, value) => {
+    let item = document.querySelector(selector);
+    if (!item) {
+      item = document.createElement("meta");
+      item.setAttribute(attribute, selector.includes("property") ? selector.match(/\[property="([^"]+)/)?.[1] : selector.match(/\[name="([^"]+)/)?.[1]);
+      document.head.appendChild(item);
+    }
+    item.setAttribute("content", value);
+  };
+  setMeta('meta[property="og:title"]', "property", title);
+  setMeta('meta[property="og:description"]', "property", description);
+  setMeta('meta[property="og:url"]', "property", canonicalUrl);
+  let schema = document.querySelector('script[data-erty-schema="business"]');
+  if (!schema) {
+    schema = document.createElement("script");
+    schema.type = "application/ld+json";
+    schema.dataset.ertySchema = "business";
+    document.head.appendChild(schema);
+  }
+  schema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "ERTY",
+    url: "https://erty.in/",
+    image: "https://erty.in/erty-landscape.jpg",
+    description,
+    areaServed: { "@type": "City", name: "Gurugram" },
+    serviceType: ["Appliance repair", "Handyman services", "Car and bike repair"],
+  });
 }
 
 function MarketingShell({ title, description, children }) {
