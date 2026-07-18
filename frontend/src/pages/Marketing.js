@@ -144,7 +144,7 @@ function MarketingShell({ title, description, children }) {
           ER<span className="neon-text-lime">TY</span>
         </Link>
         <nav className="hidden items-center gap-5 text-sm text-white/65 sm:flex">
-          <Link to="/#categories" className="hover:text-white">Services</Link>
+          <Link to="/services" className="hover:text-white">Services</Link>
           <Link to="/ai-diagnosis" className="hover:text-white">AI Lens</Link>
           <Link to="/pricing" className="hover:text-white">Pricing</Link>
           <Link to="/blog" className="hover:text-white">Blog</Link>
@@ -155,7 +155,7 @@ function MarketingShell({ title, description, children }) {
         </div>
       </header>
       <nav className="relative z-10 flex gap-5 overflow-x-auto px-5 pb-3 text-xs text-white/60 sm:hidden hide-scrollbar" aria-label="Mobile marketing navigation">
-        <Link to="/#categories" className="shrink-0 hover:text-white">Services</Link>
+        <Link to="/services" className="shrink-0 hover:text-white">Services</Link>
         <Link to="/ai-diagnosis" className="shrink-0 hover:text-white">AI Lens</Link>
         <Link to="/pricing" className="shrink-0 hover:text-white">Pricing</Link>
         <Link to="/blog" className="shrink-0 hover:text-white">Blog</Link>
@@ -178,7 +178,7 @@ function MarketingShell({ title, description, children }) {
           <div>
             <div className="text-xs font-bold uppercase tracking-[0.22em] text-white/40">Explore</div>
             <div className="mt-4 grid gap-3 text-sm text-white/65">
-              <Link to="/#categories" className="hover:text-white">Services</Link>
+              <Link to="/services" className="hover:text-white">Services</Link>
               <Link to="/ai-diagnosis" className="hover:text-white">AI Lens</Link>
               <Link to="/pricing" className="hover:text-white">Pricing</Link>
               <Link to="/blog" className="hover:text-white">Repair guides</Link>
@@ -409,7 +409,7 @@ export function MarketingHome() {
             <Link to="/login" className="btn-neon-lime inline-flex min-h-[54px] items-center justify-center gap-2 rounded-full px-7 text-sm font-bold">
               Start AI Diagnosis <ArrowRight className="h-4 w-4" />
             </Link>
-          <Link to="/#categories" className="inline-flex min-h-[54px] items-center justify-center rounded-full glass px-7 text-sm font-semibold text-white">
+          <Link to="/services" className="inline-flex min-h-[54px] items-center justify-center rounded-full glass px-7 text-sm font-semibold text-white">
               Browse services
             </Link>
           </div>
