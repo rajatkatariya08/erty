@@ -22,21 +22,36 @@ const ICON_MAP = {
 };
 
 const SERVICE_IMAGE_MAP = {
-  svc_ac_repair: "/images/service-ac-repair.png",
-  svc_ro_service: "/images/service-ro-service.png",
-  svc_chimney_service: "/images/service-chimney.png",
-  svc_washing_machine: "/images/service-washing-machine.png",
-  svc_microwave_repair: "/images/service-microwave.png",
-  svc_air_purifier: "/images/service-air-purifier.png",
-  svc_geyser_repair: "/images/service-geyser.png",
-  svc_dishwasher_repair: "/images/service-dishwasher.png",
-  svc_mixer_grinder_repair: "/images/service-mixer-grinder.png",
-  svc_air_cooler_service: "/images/service-air-cooler.png",
-  svc_refrigerator_repair: "/images/service-refrigerator.png",
-  svc_tv_repair: "/images/service-tv-repair.png",
+  svc_ac_repair: "/images/service-ac-repair-v2.png",
+  svc_ro_service: "/images/service-ro-service-v2.png",
+  svc_chimney_service: "/images/service-chimney-v2.png",
+  svc_washing_machine: "/images/service-washing-machine-v2.png",
+  svc_microwave_repair: "/images/service-microwave-v2.png",
+  svc_air_purifier: "/images/service-air-purifier-v2.png",
+  svc_geyser_repair: "/images/service-geyser-v2.png",
+  svc_dishwasher_repair: "/images/service-dishwasher-v2.png",
+  svc_mixer_grinder_repair: "/images/service-mixer-grinder-v2.png",
+  svc_air_cooler_service: "/images/service-air-cooler-v2.png",
+  svc_refrigerator_repair: "/images/service-refrigerator-v2.png",
+  svc_tv_repair: "/images/service-tv-repair-v2.png",
   svc_tv_mounting: "/images/service-tv-mounting.png",
   svc_fan_install: "/images/service-ceiling-fan.png",
   svc_bathroom_fittings: "/images/service-bathroom-fittings.png",
+};
+
+const SERVICE_IMAGE_NAME_MAP = {
+  "kitchen chimney service": "/images/service-chimney-v2.png",
+  "ac repair": "/images/service-ac-repair-v2.png",
+  "ro system service": "/images/service-ro-service-v2.png",
+  "washing machine repair": "/images/service-washing-machine-v2.png",
+  "microwave repair": "/images/service-microwave-v2.png",
+  "air purifier repair": "/images/service-air-purifier-v2.png",
+  "geyser repair": "/images/service-geyser-v2.png",
+  "dishwasher repair": "/images/service-dishwasher-v2.png",
+  "mixer grinder repair": "/images/service-mixer-grinder-v2.png",
+  "air cooler service": "/images/service-air-cooler-v2.png",
+  "refrigerator repair": "/images/service-refrigerator-v2.png",
+  "tv repair": "/images/service-tv-repair-v2.png",
 };
 
 function tileColor(idx) {
@@ -45,7 +60,7 @@ function tileColor(idx) {
 
 function ServiceTile({ svc, index, showBookingFee }) {
   const Ic = ICON_MAP[svc.icon] || Wrench;
-  const image = SERVICE_IMAGE_MAP[svc.service_id] || svc.image_url;
+  const image = SERVICE_IMAGE_MAP[svc.service_id] || SERVICE_IMAGE_NAME_MAP[svc.name?.trim().toLowerCase()] || svc.image_url;
   const color = tileColor(index);
   const { t } = useLang();
   const savings = svc.market_max && svc.market_max > svc.base_price
