@@ -177,8 +177,8 @@ function MarketingShell({ title, description, children }) {
     <div className="relative min-h-screen overflow-hidden bg-[#05050A] text-white">
       <div className="bg-mesh" />
       <header className="relative z-10 mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
-        <Link to="/" className="font-display text-2xl font-black tracking-tight">
-          ER<span className="neon-text-lime">TY</span>
+        <Link to="/" className="inline-flex items-center" aria-label="ERTY home">
+          <img src="/erty-favicon.jpg" alt="ERTY" className="h-11 w-11 rounded-xl object-cover" />
         </Link>
         <nav className="hidden items-center gap-5 text-sm text-white/65 sm:flex">
           <Link to="/services" className="hover:text-white">Services</Link>
@@ -201,8 +201,8 @@ function MarketingShell({ title, description, children }) {
       <footer className="relative z-10 border-t border-white/10 bg-[#07070D]/80">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[1.3fr_1fr_1fr_1.2fr]">
           <div>
-            <Link to="/" className="font-display text-3xl font-black tracking-tight">
-              ER<span className="neon-text-lime">TY</span>
+            <Link to="/" className="inline-flex items-center" aria-label="ERTY home">
+              <img src="/erty-landscape.jpg" alt="ERTY - executing rapid tasks for you" className="h-auto w-52 max-w-full rounded-xl object-contain" />
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-6 text-white/55">
               Rapid doorstep help with clearer estimates, AI Lens guidance, and verified technician workflows in Gurugram.

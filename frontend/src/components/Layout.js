@@ -41,8 +41,8 @@ export default function Layout() {
 
       {/* Top header */}
       <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 pt-5 sm:px-8 lg:pt-7">
-        <Link to="/" className="font-display font-black text-xl tracking-tight" data-testid="brand">
-          ER<span className="neon-text-lime">TY</span>
+        <Link to="/" className="inline-flex items-center" data-testid="brand" aria-label="ERTY home">
+          <img src="/erty-favicon.jpg" alt="ERTY" className="h-10 w-10 rounded-xl object-cover" />
         </Link>
         <div className="flex items-center gap-2">
           {user.is_technician && (
