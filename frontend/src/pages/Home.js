@@ -114,16 +114,12 @@ function SectionHeader({ kicker, title, body, action }) {
 
 function TrustStrip() {
   return (
-    <section className="grid grid-cols-2 gap-3 sm:grid-cols-4" data-testid="trust-strip">
+    <section className="flex flex-wrap items-center gap-2" data-testid="trust-strip" aria-label="ERTY promises">
       {TRUST_ITEMS.map(({ label, detail, Icon, color }) => (
-        <div key={label} className="card-fix p-4">
-          <div className="relative">
-            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-2xl bg-white/[0.06]" style={{ color }}>
-              <Icon className="h-5 w-5" />
-            </div>
-            <div className="text-sm font-bold leading-tight">{label}</div>
-            <div className="mt-1 text-xs text-white/50">{detail}</div>
-          </div>
+        <div key={label} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.045] px-3 py-2 text-xs text-white/75">
+          <Icon className="h-3.5 w-3.5" style={{ color }} />
+          <span className="font-semibold">{label}</span>
+          <span className="hidden text-white/45 sm:inline">· {detail}</span>
         </div>
       ))}
     </section>
@@ -228,6 +224,7 @@ export default function HomePage() {
     }
     const matchedCategory = categories.find((cat) => cat.label?.toLowerCase().includes(searchTerm));
     if (matchedCategory && !matchedCategory.coming_soon) navigate(`/category/${matchedCategory.id}`);
+    else setModalOpen(true);
   }
 
   return (
@@ -278,30 +275,26 @@ export default function HomePage() {
               ))}
             </div>
           )}
+          {searchTerm && searchResults.length === 0 && (
+            <div className="absolute left-0 right-0 top-[calc(100%+8px)] z-20 rounded-2xl border border-white/10 bg-[#111116] px-4 py-3 text-sm text-white/65 shadow-2xl">
+              No exact match. Press Enter to send a custom request.
+            </div>
+          )}
         </div>
       </form>
 
-      <TrustStrip />
-
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-fix p-6 sm:p-7" data-testid="ai-diagnose-cta">
-        <div className="blob" style={{ background: "#00E5FF", top: -60, right: -40 }} />
-        <div className="blob" style={{ background: "#FF007F", bottom: -80, left: -40 }} />
-        <div className="relative flex items-start justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#00E5FF]">
-              <Sparkles className="h-3.5 w-3.5" /> {t("ai_kicker")}
-            </div>
-            <h2 className="mt-3 font-display text-2xl font-black leading-tight sm:text-[31px]">{t("ai_title")}</h2>
-            <p className="mt-2 max-w-md text-sm text-white/70">{t("ai_body")}</p>
-          </div>
-          <motion.div animate={{ y: [0, -8, 0] }} transition={{ repeat: Infinity, duration: 3 }}>
-            <ScanLine className="h-14 w-14 text-[#39FF14]" />
-          </motion.div>
+      <section id="categories" data-testid="pillars-section">
+        <SectionHeader
+          kicker="Categories"
+          title="Choose the kind of help"
+          body="Repair, install, service, or ask us for a custom task."
+        />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {categories.map((c, i) => (
+            <PillarTile key={c.id} cat={c} i={i} onClick={() => navigate(`/category/${c.id}`)} />
+          ))}
         </div>
-        <button onClick={() => navigate("/diagnose")} data-testid="start-ai-diagnose-btn" className="btn-neon-blue mt-5 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">
-          {t("ai_cta")} <ArrowRight className="h-4 w-4" />
-        </button>
-      </motion.div>
+      </section>
 
       <section data-testid="popular-services-section">
         <SectionHeader
@@ -321,23 +314,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="categories" data-testid="pillars-section">
-        <SectionHeader
-          kicker="Categories"
-          title="Choose the kind of help"
-          body="Repair, install, service, or ask us for a custom task."
-        />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {categories.map((c, i) => (
-            <PillarTile
-              key={c.id}
-              cat={c}
-              i={i}
-              onClick={() => !c.coming_soon && navigate(`/category/${c.id}`)}
-            />
-          ))}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-fix p-6 sm:p-7" data-testid="ai-diagnose-cta">
+        <div className="blob" style={{ background: "#00E5FF", top: -60, right: -40 }} />
+        <div className="blob" style={{ background: "#FF007F", bottom: -80, left: -40 }} />
+        <div className="relative flex items-start justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-[#00E5FF]"><Sparkles className="h-3.5 w-3.5" /> {t("ai_kicker")}</div>
+            <h2 className="mt-3 font-display text-2xl font-black leading-tight sm:text-[31px]">{t("ai_title")}</h2>
+            <p className="mt-2 max-w-md text-sm text-white/70">{t("ai_body")}</p>
+          </div>
+          <ScanLine className="h-14 w-14 text-[#39FF14]" />
         </div>
-      </section>
+        <button onClick={() => navigate("/diagnose")} data-testid="start-ai-diagnose-btn" className="btn-neon-blue mt-5 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">{t("ai_cta")} <ArrowRight className="h-4 w-4" /></button>
+      </motion.div>
+
+      <TrustStrip />
 
       <HowItWorks />
 
