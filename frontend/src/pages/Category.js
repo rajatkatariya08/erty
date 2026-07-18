@@ -34,6 +34,7 @@ const SERVICE_IMAGE_MAP = {
   svc_air_cooler_service: "/images/service-air-cooler-v2.png",
   svc_refrigerator_repair: "/images/service-refrigerator-v2.png",
   svc_tv_repair: "/images/service-tv-repair-v2.png",
+  svc_car_battery_jumpstart: "/images/service-car-battery-jumpstart-v2.png",
   svc_tv_mounting: "/images/service-tv-mounting.png",
   svc_fan_install: "/images/service-ceiling-fan.png",
   svc_bathroom_fittings: "/images/service-bathroom-fittings.png",
@@ -52,6 +53,7 @@ const SERVICE_IMAGE_NAME_MAP = {
   "air cooler service": "/images/service-air-cooler-v2.png",
   "refrigerator repair": "/images/service-refrigerator-v2.png",
   "tv repair": "/images/service-tv-repair-v2.png",
+  "car battery jumpstart": "/images/service-car-battery-jumpstart-v2.png",
 };
 
 function tileColor(idx) {
