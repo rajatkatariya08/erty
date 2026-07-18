@@ -16,8 +16,6 @@ const FALLBACK_CATEGORIES = [
   { id: "home_appliances", label: "Home Appliances", tagline: "Repair \u00b7 Install \u00b7 Service", coming_soon: false },
   { id: "handyman", label: "Handyman & Odd Jobs", tagline: "\u20b9100 booking fee", booking_fee: 100, coming_soon: false },
   { id: "car_and_bike", label: "Car & Bike Repair", tagline: "Doorstep vehicle care", coming_soon: false },
-  { id: "permanent_drivers", label: "Permanent Drivers", tagline: "Monthly \u00b7 Full-time", coming_soon: true },
-  { id: "domestic_maids", label: "Domestic Maids", tagline: "Verified housekeeping", coming_soon: true },
 ];
 
 const PILLAR_META = {
@@ -91,28 +89,12 @@ function PillarTile({ cat, i, onClick }) {
       <img src={meta.image} alt="" aria-hidden="true" className="pillar-image" />
       <div className="pillar-image-shade" />
       <div className="blob" style={{ background: meta.blob, top: -60, right: -40, opacity: 0.45 }} />
-      <div className="relative flex h-full flex-col">
+      <div className="relative z-[2] flex h-full flex-col">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/[0.06]" style={{ color: meta.blob }}>
           <Ic className="h-6 w-6" />
         </div>
-        <div className="mt-3 text-[10px] uppercase tracking-[0.28em] text-white/50">{t("category")}</div>
         <div className="mt-1 font-display text-xl font-black leading-tight sm:text-2xl">{t(labelKey[0])}</div>
-        <div className="mt-1 text-xs text-white/60">{t(labelKey[1])}</div>
-        <div className="mt-auto inline-flex items-center gap-1.5 pt-4 text-xs font-semibold" style={{ color: cat.coming_soon ? "rgba(255,255,255,0.5)" : meta.blob }}>
-          {cat.coming_soon ? t("coming_soon") : <>Explore {"\u2192"}</>}
-        </div>
       </div>
-
-      {cat.coming_soon && (
-        <div
-          data-testid={`coming-soon-${cat.id}`}
-          className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 backdrop-blur-md"
-        >
-          <div className="rounded-full border border-white/20 bg-white/[0.06] px-5 py-2 text-xs font-bold uppercase tracking-[0.3em] text-white/90 shadow-[0_0_24px_rgba(255,255,255,0.15)]">
-            {t("coming_soon")}
-          </div>
-        </div>
-      )}
     </motion.button>
   );
 }
@@ -339,7 +321,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section data-testid="pillars-section">
+      <section id="categories" data-testid="pillars-section">
         <SectionHeader
           kicker="Categories"
           title="Choose the kind of help"
