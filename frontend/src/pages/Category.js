@@ -51,18 +51,18 @@ function ServiceTile({ svc, index, showBookingFee }) {
       {image && <img src={image} alt="" aria-hidden="true" className="service-tile-image" />}
       {image && <div className="service-tile-image-shade" />}
       <div className="blob" style={{ background: color, top: -40, right: -30, opacity: 0.4 }} />
-      <div className="relative">
+      <div className="relative z-[2] text-white">
         <div className="h-10 w-10 rounded-2xl bg-white/[0.06] flex items-center justify-center" style={{ color }}>
           <Ic className="h-5 w-5" />
         </div>
         <div className="mt-3 font-display text-sm sm:text-base font-bold leading-tight">{svc.name}</div>
         <div className="mt-2 flex items-baseline gap-1.5">
-          <span className="text-[10px] uppercase tracking-widest text-white/40">{t("from")}</span>
+          <span className="text-[10px] uppercase tracking-widest text-white/65">{t("from")}</span>
           <span className="font-display text-lg font-black text-[#39FF14]">₹{svc.base_price}</span>
         </div>
         {showBookingFee && svc.booking_fee > 0 && (
           <div
-            className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[#10B981]/15 border border-[#10B981]/30 px-2 py-0.5 text-[10px] font-semibold text-[#10B981]"
+            className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[#10B981]/25 border border-[#10B981]/45 px-2 py-0.5 text-[10px] font-semibold text-[#6EE7B7]"
             data-testid={`booking-fee-${svc.service_id}`}
           >
             {t("booking_fee")}: ₹{svc.booking_fee}
