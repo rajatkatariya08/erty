@@ -191,7 +191,7 @@ export default function Booking() {
           readOnly={false}
           disabled={false}
           value={phone}
-          onChange={(e) => setPhone(e.target.value.replace(/[^\\d+() -]/g, ""))}
+          onChange={(e) => setPhone(e.target.value.replace(/[^\d+() -]/g, ""))}
           onInput={(e) => setPhone(e.currentTarget.value)}
           onPointerDown={(e) => e.stopPropagation()}
           placeholder="10-digit number for booking updates"
