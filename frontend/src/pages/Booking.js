@@ -45,7 +45,8 @@ export default function Booking() {
   }, [serviceId]);
 
   const submit = async () => {
-    if (!/^\\d{10}$/.test(phone.replace(/\\D/g, ""))) { toast.error("Please enter a valid 10-digit contact number"); return; }
+    const normalizedPhone = phone.replace(/\D/g, "");
+    if (!/^\d{10}$/.test(normalizedPhone)) { toast.error("Please enter a valid 10-digit contact number"); return; }
     if (!coords) { toast.error("Please drop a pin on the map for your location"); return; }
     if (!address.trim()) { toast.error("Address is required"); return; }
     setSubmitting(true);
@@ -57,7 +58,7 @@ export default function Booking() {
         scheduled_date: date,
         scheduled_slot: slot,
         notes,
-        customer_phone: phone.replace(/\\D/g, ""),
+        customer_phone: normalizedPhone,
         diagnosis_id: diagId || undefined,
         dest_lat: coords.lat,
         dest_lng: coords.lng,
