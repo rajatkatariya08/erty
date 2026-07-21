@@ -19,9 +19,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    // CRITICAL: If returning from OAuth callback, skip the /me check.
-    // AuthCallback will exchange the session_id and establish the session first.
-    if (typeof window !== "undefined" && window.location.hash?.includes("session_id=")) {
+    // AuthCallback establishes the Supabase session before checking /me.
+    if (typeof window !== "undefined" && window.location.hash?.includes("access_token=")) {
       setLoading(false);
       return;
     }

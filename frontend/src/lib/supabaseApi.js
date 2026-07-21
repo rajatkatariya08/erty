@@ -85,6 +85,7 @@ function mapBooking(row) {
     user_id: row.user_id,
     customer_name: row.customer_name || "",
     customer_email: row.customer_email || "",
+    customer_phone: row.customer_phone || "",
     service_id: row.service_id,
     service_name: row.service_name,
     category: row.category,
@@ -433,7 +434,7 @@ async function post(path, payload = {}) {
   if (path === "/auth/admin/login" || path === "/auth/tech/login") {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: `${window.location.origin}${path === "/auth/admin/login" ? "/admin/login" : "/technician/login"}` },
     });
     if (error) fail(error.message, 401);
     return response({ ok: true });
@@ -482,7 +483,7 @@ async function post(path, payload = {}) {
         user_id: user.user_id,
         customer_name: user.full_name || user.email || "Customer",
         customer_email: user.email || "",
-        customer_phone: payload.customer_phone || "",
+        customer_phone: payload.customer_phone,
         service_id: svc.id,
         service_name: svc.name,
         category: svc.category,

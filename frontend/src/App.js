@@ -31,8 +31,8 @@ import TechnicianSignup from "./pages/TechnicianSignup";
 
 function AppRouter() {
   const location = useLocation();
-  // Detect session_id synchronously during render, before any protected routes check auth.
-  if (location.hash?.includes("session_id=")) {
+  // Supabase OAuth returns tokens in the URL hash before the client cleans them up.
+  if (location.hash?.includes("access_token=")) {
     return <AuthCallback />;
   }
   return (
