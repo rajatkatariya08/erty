@@ -45,8 +45,8 @@ export default function Booking() {
   }, [serviceId]);
 
   const submit = async () => {
-    const normalizedPhone = phone.replace(/\D/g, "");
-    if (!/^\d{10}$/.test(normalizedPhone)) { toast.error("Please enter a valid 10-digit contact number"); return; }
+    const normalizedPhone = phone.split("").filter((character) => character >= "0" && character <= "9").join("");
+    if (normalizedPhone.length !== 10) { toast.error("Please enter a valid 10-digit contact number"); return; }
     if (!coords) { toast.error("Please drop a pin on the map for your location"); return; }
     if (!address.trim()) { toast.error("Address is required"); return; }
     setSubmitting(true);
@@ -192,8 +192,7 @@ export default function Booking() {
           readOnly={false}
           disabled={false}
           value={phone}
-          onChange={(e) => setPhone(e.target.value.replace(/[^\d+() -]/g, ""))}
-          onInput={(e) => setPhone(e.currentTarget.value)}
+          onChange={(e) => setPhone(e.target.value.split("").filter((character) => character >= "0" && character <= "9").join(""))}
           onPointerDown={(e) => e.stopPropagation()}
           placeholder="10-digit number for booking updates"
           className="relative z-10 pointer-events-auto w-full rounded-2xl bg-[#121217] border border-white/10 p-4 text-sm text-white placeholder:text-white/30 focus:border-[#00E5FF] focus:outline-none"
