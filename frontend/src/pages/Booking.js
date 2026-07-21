@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Calendar, MapPin, Clock, StickyNote } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Clock, StickyNote, Phone } from "lucide-react";
 import { api } from "../lib/api";
 import { toast } from "sonner";
 import AddressPickerMap from "../components/AddressPickerMap";
@@ -30,6 +30,7 @@ export default function Booking() {
   const [slot, setSlot] = useState(SLOTS[0]);
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
+  const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [coords, setCoords] = useState(null);
   const [area, setArea] = useState(null);
@@ -44,6 +45,7 @@ export default function Booking() {
   }, [serviceId]);
 
   const submit = async () => {
+    if (!/^\\d{10}$/.test(phone.replace(/\\D/g, ""))) { toast.error("Please enter a valid 10-digit contact number"); return; }
     if (!coords) { toast.error("Please drop a pin on the map for your location"); return; }
     if (!address.trim()) { toast.error("Address is required"); return; }
     setSubmitting(true);
@@ -55,6 +57,7 @@ export default function Booking() {
         scheduled_date: date,
         scheduled_slot: slot,
         notes,
+        customer_phone: phone.replace(/\\D/g, ""),
         diagnosis_id: diagId || undefined,
         dest_lat: coords.lat,
         dest_lng: coords.lng,
@@ -173,6 +176,23 @@ export default function Booking() {
             GPS: {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}
           </div>
         )}
+      </div>
+
+      {/* Notes */}
+      <div>
+        <div className="flex items-center gap-2 text-sm text-white/70 mb-2">
+          <Phone className="h-4 w-4 text-[#39FF14]" /> Contact number <span className="text-[#FF007F]">*</span>
+        </div>
+        <input
+          data-testid="contact-phone-input"
+          type="tel"
+          inputMode="numeric"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value.replace(/[^\\d+() -]/g, ""))}
+          placeholder="10-digit number for booking updates"
+          className="w-full rounded-2xl bg-[#121217] border border-white/10 p-4 text-sm text-white placeholder:text-white/30 focus:border-[#00E5FF] focus:outline-none"
+          required
+        />
       </div>
 
       {/* Notes */}

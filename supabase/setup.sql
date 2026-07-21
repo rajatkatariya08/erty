@@ -79,6 +79,7 @@ create table if not exists public.diagnoses (
 
 alter table public.bookings add column if not exists customer_name text not null default '';
 alter table public.bookings add column if not exists customer_email text not null default '';
+alter table public.bookings add column if not exists customer_phone text not null default '';
 
 create table if not exists public.bookings (
   id uuid primary key default gen_random_uuid(),

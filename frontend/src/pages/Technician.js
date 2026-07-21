@@ -247,6 +247,7 @@ export default function Technician() {
                     <div className="text-[10px] uppercase tracking-widest text-white/40">Customer</div>
                     <div className="mt-1 text-sm font-semibold text-white/90">{j.customer_name || "Customer details pending"}</div>
                     {j.customer_email && <div className="mt-1 truncate text-xs text-white/55">{j.customer_email}</div>}
+                    {j.customer_phone && <a href={`tel:${j.customer_phone}`} className="mt-2 inline-flex text-xs font-semibold text-[#39FF14]">Call {j.customer_phone}</a>}
                   </div>
                   <div className="rounded-2xl border border-white/10 bg-[#0B0B10] p-3">
                     <div className="text-[10px] uppercase tracking-widest text-white/40">Service location</div>

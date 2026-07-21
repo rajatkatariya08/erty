@@ -482,6 +482,7 @@ async function post(path, payload = {}) {
         user_id: user.user_id,
         customer_name: user.full_name || user.email || "Customer",
         customer_email: user.email || "",
+        customer_phone: payload.customer_phone || "",
         service_id: svc.id,
         service_name: svc.name,
         category: svc.category,
