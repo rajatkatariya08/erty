@@ -32,7 +32,7 @@ import TechnicianSignup from "./pages/TechnicianSignup";
 function AppRouter() {
   const location = useLocation();
   // Supabase OAuth returns tokens in the URL hash before the client cleans them up.
-  if (location.hash?.includes("access_token=")) {
+  if (location.hash?.includes("access_token=") || new URLSearchParams(location.search).has("code")) {
     return <AuthCallback />;
   }
   return (

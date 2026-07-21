@@ -20,6 +20,11 @@ export default function AuthCallback() {
 
     (async () => {
       try {
+        const code = new URLSearchParams(window.location.search).get("code");
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+        }
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
         if (sessionError || !sessionData.session) throw sessionError || new Error("No Supabase session");
         const { data: userData } = await api.get("/auth/me");

@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // AuthCallback establishes the Supabase session before checking /me.
-    if (typeof window !== "undefined" && window.location.hash?.includes("access_token=")) {
+    if (typeof window !== "undefined" && (window.location.hash?.includes("access_token=") || new URLSearchParams(window.location.search).has("code"))) {
       setLoading(false);
       return;
     }
