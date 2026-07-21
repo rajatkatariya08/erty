@@ -83,6 +83,8 @@ function mapBooking(row) {
     booking_id: row.id,
     booking_code: row.booking_code,
     user_id: row.user_id,
+    customer_name: row.customer_name || "",
+    customer_email: row.customer_email || "",
     service_id: row.service_id,
     service_name: row.service_name,
     category: row.category,
@@ -478,6 +480,8 @@ async function post(path, payload = {}) {
       .insert({
         booking_code: code("bk"),
         user_id: user.user_id,
+        customer_name: user.full_name || user.email || "Customer",
+        customer_email: user.email || "",
         service_id: svc.id,
         service_name: svc.name,
         category: svc.category,
@@ -649,10 +653,15 @@ async function post(path, payload = {}) {
     const { data: tech, error: techError } = await supabase.from("technicians").select("*").eq("id", payload.tech_id).maybeSingle();
     if (techError) fail(techError.message);
     if (!tech) fail("Technician not found", 404);
+    const { data: existingBooking, error: bookingLookupError } = await supabase.from("bookings").select("*").eq("id", bookingId).maybeSingle();
+    if (bookingLookupError) fail(bookingLookupError.message);
+    if (!existingBooking) fail("Booking not found", 404);
     const { data: booking, error } = await supabase
       .from("bookings")
       .update({
         technician_id: tech.id,
+        customer_name: existingBooking.customer_name || "Customer",
+        customer_email: existingBooking.customer_email || "",
         tech_name: tech.name,
         tech_picture: tech.picture,
         tech_lat: tech.home_lat,

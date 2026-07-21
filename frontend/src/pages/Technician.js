@@ -242,6 +242,27 @@ export default function Technician() {
                     <div className="mt-1 font-display font-bold text-[#39FF14]">₹{j.price}</div>
                   </div>
                 </div>
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-white/10 bg-[#0B0B10] p-3">
+                    <div className="text-[10px] uppercase tracking-widest text-white/40">Customer</div>
+                    <div className="mt-1 text-sm font-semibold text-white/90">{j.customer_name || "Customer details pending"}</div>
+                    {j.customer_email && <div className="mt-1 truncate text-xs text-white/55">{j.customer_email}</div>}
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-[#0B0B10] p-3">
+                    <div className="text-[10px] uppercase tracking-widest text-white/40">Service location</div>
+                    <div className="mt-1 text-xs leading-5 text-white/75">{j.address || "Address not provided"}</div>
+                    {j.dest_lat != null && j.dest_lng != null && (
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${j.dest_lat},${j.dest_lng}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[#00E5FF] hover:text-white"
+                      >
+                        <MapPin className="h-3.5 w-3.5" /> Open in Maps
+                      </a>
+                    )}
+                  </div>
+                </div>
                 {j.notes && (
                   <div className="mt-3 rounded-2xl bg-[#0B0B10] border border-white/5 p-3 text-xs text-white/70">
                     <span className="text-white/40">Note: </span>{j.notes}

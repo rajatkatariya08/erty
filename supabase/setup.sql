@@ -62,6 +62,8 @@ create table if not exists public.technicians (
 create table if not exists public.diagnoses (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
+  customer_name text not null default '',
+  customer_email text not null default '',
   category text not null,
   issue_summary text not null default '',
   detected_problems text[] not null default '{}',
@@ -74,6 +76,9 @@ create table if not exists public.diagnoses (
   language text not null default 'English',
   created_at timestamptz not null default now()
 );
+
+alter table public.bookings add column if not exists customer_name text not null default '';
+alter table public.bookings add column if not exists customer_email text not null default '';
 
 create table if not exists public.bookings (
   id uuid primary key default gen_random_uuid(),
