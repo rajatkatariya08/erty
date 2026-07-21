@@ -187,10 +187,15 @@ export default function Booking() {
           data-testid="contact-phone-input"
           type="tel"
           inputMode="numeric"
+          name="customer_phone"
+          readOnly={false}
+          disabled={false}
           value={phone}
           onChange={(e) => setPhone(e.target.value.replace(/[^\\d+() -]/g, ""))}
+          onInput={(e) => setPhone(e.currentTarget.value)}
+          onPointerDown={(e) => e.stopPropagation()}
           placeholder="10-digit number for booking updates"
-          className="w-full rounded-2xl bg-[#121217] border border-white/10 p-4 text-sm text-white placeholder:text-white/30 focus:border-[#00E5FF] focus:outline-none"
+          className="relative z-10 pointer-events-auto w-full rounded-2xl bg-[#121217] border border-white/10 p-4 text-sm text-white placeholder:text-white/30 focus:border-[#00E5FF] focus:outline-none"
           required
         />
       </div>
