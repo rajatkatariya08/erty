@@ -57,6 +57,12 @@ export default function AdminLogin() {
                 Sign in with the Google account that has been marked as admin in Supabase.
               </div>
 
+              {user && !user.is_admin && (
+                <div className="rounded-xl border border-[#FF007F]/30 bg-[#FF007F]/10 px-3 py-2 text-xs text-[#FF69B4]">
+                  {user.email} is signed in as {user.role || "customer"}, not admin. Choose the admin Google account below.
+                </div>
+              )}
+
               {err && (
                 <div data-testid="admin-login-error" className="inline-flex items-center gap-2 rounded-xl border border-[#FF007F]/30 bg-[#FF007F]/10 px-3 py-2 text-xs text-[#FF69B4]">
                   <AlertTriangle className="h-3.5 w-3.5" /> {err}
@@ -70,7 +76,7 @@ export default function AdminLogin() {
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold text-[#05050A] disabled:opacity-60"
                 style={{ background: "#FFEA00", boxShadow: "0 0 22px rgba(255,234,0,0.35)" }}
               >
-                <Lock className="h-4 w-4" /> {busy ? "Opening Google..." : "Continue with Google"}
+                <Lock className="h-4 w-4" /> {busy ? "Opening Google..." : user && !user.is_admin ? "Choose another Google account" : "Continue with Google"}
               </button>
             </div>
           </form>

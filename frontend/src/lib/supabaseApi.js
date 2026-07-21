@@ -434,7 +434,10 @@ async function post(path, payload = {}) {
   if (path === "/auth/admin/login" || path === "/auth/tech/login") {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}${path === "/auth/admin/login" ? "/admin/login" : "/technician/login"}` },
+      options: {
+        redirectTo: `${window.location.origin}${path === "/auth/admin/login" ? "/admin/login" : "/technician/login"}`,
+        queryParams: { prompt: "select_account" },
+      },
     });
     if (error) fail(error.message, 401);
     return response({ ok: true });
@@ -724,7 +727,12 @@ async function patch(path, payload = {}) {
     const { data, error } = await supabase.from("technicians").update({ status: payload.status }).eq("id", id).select("*").single();
     if (error) fail(error.message);
     if (payload.status === "approved" && data.user_id) {
-      await supabase.from("profiles").update({ role: "technician" }).eq("id", data.user_id);
+      const { error: roleError } = await supabase
+        .from("profiles")
+        .update({ role: "technician" })
+        .eq("id", data.user_id)
+        .neq("role", "admin");
+      if (roleError) fail(roleError.message);
     }
     return response({ ok: true, status: payload.status });
   }
