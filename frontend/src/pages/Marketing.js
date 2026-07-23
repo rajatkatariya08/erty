@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight, BadgeCheck, Bike, BookOpenText, Camera,
-  ChevronRight, ClipboardCheck, HelpCircle, MapPin, PackageSearch,
+  ChevronDown, ChevronRight, ClipboardCheck, MapPin, PackageSearch,
   Pause, Play, ShieldCheck, Sparkles, UserCheck, WalletCards, WashingMachine, Wrench,
 } from "lucide-react";
 
@@ -13,6 +13,7 @@ const SERVICE_GROUPS = [
     description: "AC, refrigerator, washing machine, microwave, geyser, RO, TV, chimney, and dishwasher support.",
     Icon: WashingMachine,
     color: "#FF007F",
+    image: "/images/category-home-appliances.png",
   },
   {
     title: "Handyman and installation",
@@ -20,6 +21,7 @@ const SERVICE_GROUPS = [
     description: "Electrical, plumbing, drilling, fittings, furniture assembly, TV mounting, and odd jobs.",
     Icon: Wrench,
     color: "#39FF14",
+    image: "/images/category-handyman.png",
   },
   {
     title: "Car and bike support",
@@ -27,6 +29,7 @@ const SERVICE_GROUPS = [
     description: "Doorstep inspection, battery help, minor fixes, servicing support, and emergency diagnosis.",
     Icon: Bike,
     color: "#00E5FF",
+    image: "/images/category-car-bike.png",
   },
 ];
 
@@ -79,11 +82,25 @@ const FEATURES = [
 ];
 
 const FAQS = [
-  ["What is ERTY?", "ERTY is a doorstep repair and rapid task platform for home appliances, handyman work, and vehicle support."],
-  ["Is AI Lens a live video call?", "Not yet. AI Lens currently works from photos and AI chat. It is designed to explain the likely issue before booking."],
-  ["Does ERTY sell spare parts?", "No. ERTY shows market part estimates only to help customers understand possible expenses and avoid unfair quotes."],
-  ["Are estimates final?", "No. Estimates help customers prepare. The final repair need and price must be confirmed after technician inspection."],
-  ["Where is ERTY available?", "ERTY is starting with focused coverage in Gurugram so response time and service quality can stay reliable."],
+  ["How does booking work?", "Choose a service, share your address and preferred time, and confirm the request. ERTY then assigns an available technician and lets you track the booking."],
+  ["Are ERTY technicians verified?", "Technician profiles and submitted details are reviewed by the ERTY operations team before they can receive customer bookings."],
+  ["Are the displayed prices final?", "Fixed service or booking fees are shown before confirmation. Repair and spare-part costs may change after physical inspection."],
+  ["When do I make payment?", "Payment is made after the service unless a specific booking clearly states otherwise. Approve any additional work before it begins."],
+  ["Does ERTY sell spare parts?", "No. ERTY provides market-price awareness to help customers assess quotations from technicians or local sellers."],
+  ["How are spare-part estimates calculated?", "ERTY uses the appliance type, brand, model details, and available market references. These figures are indicative, not guaranteed selling prices."],
+  ["What can AI Lens diagnose?", "AI Lens examines photos and descriptions of visible appliance, vehicle, and household issues and suggests likely causes and suitable services."],
+  ["Is AI Lens a live video call?", "No. It currently works through photos and AI chat. It helps you understand the likely issue but does not replace an in-person inspection."],
+  ["Can AI Lens guarantee the diagnosis?", "No. AI Lens provides an initial assessment. A technician must confirm the final diagnosis and repair requirement on site."],
+  ["Where is ERTY available?", "ERTY currently provides focused service coverage in Gurugram, Haryana, so response time and service quality can stay reliable."],
+  ["Can I reschedule or cancel a booking?", "Open your Bookings page to review the request and contact support as early as possible. Available changes depend on the booking status."],
+  ["What if the technician cannot repair the issue?", "The technician should explain the findings and recommended next step before any additional work or expense is approved."],
+];
+
+const TRUST_ITEMS = [
+  { title: "Verified technicians", body: "Profiles reviewed by ERTY", Icon: ShieldCheck, color: "#FF007F" },
+  { title: "Upfront estimates", body: "Know the range before work", Icon: ClipboardCheck, color: "#39FF14" },
+  { title: "Pay after service", body: "Approve additional costs first", Icon: WalletCards, color: "#00E5FF" },
+  { title: "Gurugram coverage", body: "Focused local response", Icon: MapPin, color: "#FFEA00" },
 ];
 
 const BLOGS = [
@@ -424,6 +441,46 @@ function ProcessShowcase({ compact = false }) {
   );
 }
 
+function FAQAccordion() {
+  const [openIndex, setOpenIndex] = useState(0);
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {FAQS.map(([question, answer], index) => {
+        const isOpen = openIndex === index;
+        return (
+          <div
+            key={question}
+            className={`overflow-hidden rounded-2xl border bg-[#101017]/90 transition-colors ${
+              isOpen ? "border-[#FF007F]/55" : "border-white/10 hover:border-white/20"
+            }`}
+          >
+            <button
+              type="button"
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+              onClick={() => setOpenIndex(isOpen ? -1 : index)}
+              aria-expanded={isOpen}
+            >
+              <span className="font-display text-base font-black sm:text-lg">{question}</span>
+              <span
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border"
+                style={{ borderColor: isOpen ? "#FF007F" : "rgba(0,229,255,.55)", color: isOpen ? "#FF007F" : "#00E5FF" }}
+              >
+                <ChevronDown className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+              </span>
+            </button>
+            {isOpen && (
+              <div className="border-t border-white/8 px-5 pb-5 pt-4 text-sm leading-6 text-white/60">
+                {answer}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function MarketingHome() {
   return (
     <MarketingShell
@@ -476,52 +533,67 @@ export function MarketingHome() {
       </section>
 
       <section className="py-12">
-        <SectionTitle kicker="Services" title="Services ERTY handles" body="Start with the most common repair categories today. More local services can be added from the admin panel as operations grow." />
+        <SectionTitle
+          kicker="Services"
+          title="The right help for the job"
+          body="Choose a category to see available services, starting prices, and what to expect before a technician arrives."
+        />
         <div className="grid gap-4 lg:grid-cols-3">
-          {SERVICE_GROUPS.map(({ title, description, slug, Icon, color }) => (
-            <Link key={title} to={`/services/${slug}`} className="card-fix p-6 transition-colors hover:border-white/25">
-              <div className="blob" style={{ background: color, top: -80, right: -60 }} />
-              <div className="relative">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06]" style={{ color }}><Icon className="h-6 w-6" /></div>
-                <h3 className="mt-5 font-display text-2xl font-black">{title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/58">{description}</p>
-                <div className="mt-6 inline-flex items-center gap-2 text-sm font-bold" style={{ color }}>View services <ArrowRight className="h-4 w-4" /></div>
+          {SERVICE_GROUPS.map(({ title, description, slug, Icon, color, image }) => (
+            <Link
+              key={title}
+              to={`/services/${slug}`}
+              className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101017] transition-colors hover:border-white/25"
+              style={{ borderLeftColor: color, borderLeftWidth: 3 }}
+            >
+              <div className="aspect-[16/10] overflow-hidden bg-[#0D0D13]">
+                <img
+                  src={image}
+                  alt=""
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+              </div>
+              <div className="p-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06]" style={{ color }}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-display text-2xl font-black">{title}</h3>
+                <p className="mt-3 min-h-[72px] text-sm leading-6 text-white/58">{description}</p>
+                <div className="mt-5 inline-flex items-center gap-2 text-sm font-bold" style={{ color }}>
+                  Explore services <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
               </div>
             </Link>
           ))}
         </div>
-      </section>
-
-      <section className="grid gap-4 py-12 lg:grid-cols-3">
-        <div className="card-fix p-6 lg:col-span-2">
-          <div className="relative">
-            <PackageSearch className="h-8 w-8 text-[#FFEA00]" />
-            <h2 className="mt-4 font-display text-3xl font-black">Spare part price awareness, not spare part selling.</h2>
-            <p className="mt-3 text-base leading-7 text-white/60">
-              ERTY does not sell parts. AI Lens can show rough market ranges for likely replacement parts so customers understand possible expenses and no one can make the repair feel mysterious.
-            </p>
-          </div>
-        </div>
-        <div className="card-fix p-6">
-          <ShieldCheck className="h-8 w-8 text-[#39FF14]" />
-          <h3 className="mt-4 font-display text-2xl font-black">Built for trust</h3>
-          <p className="mt-3 text-sm leading-6 text-white/58">Technicians are reviewed by admin, bookings are tracked, and customers see clearer information before choosing a service.</p>
-        </div>
-      </section>
-
-      <section className="py-12">
-        <SectionTitle kicker="Questions" title="Clear answers before booking" />
-        <div className="grid gap-3 lg:grid-cols-2">
-          {FAQS.map(([question, answer]) => (
-            <div key={question} className="card-fix p-5">
-              <div className="relative">
-                <HelpCircle className="mb-3 h-5 w-5 text-[#00E5FF]" />
-                <h3 className="font-bold">{question}</h3>
-                <p className="mt-2 text-sm leading-6 text-white/58">{answer}</p>
+        <div className="mt-5 grid overflow-hidden rounded-2xl border border-white/10 bg-[#0D0D13]/90 sm:grid-cols-2 lg:grid-cols-4">
+          {TRUST_ITEMS.map(({ title, body, Icon, color }, index) => (
+            <div
+              key={title}
+              className={`flex items-center gap-3 px-5 py-4 ${index ? "border-t border-white/10 sm:border-l sm:border-t-0" : ""}`}
+            >
+              <Icon className="h-6 w-6 shrink-0" style={{ color }} />
+              <div>
+                <div className="text-sm font-bold text-white/90">{title}</div>
+                <div className="mt-0.5 text-xs text-white/45">{body}</div>
               </div>
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="grid gap-8 py-12 lg:grid-cols-[0.65fr_1.35fr] lg:gap-12">
+        <div>
+          <SectionTitle
+            kicker="Questions"
+            title="Answers before you book"
+            body="Everything you need to know about pricing, technicians, AI Lens, parts, and service coverage."
+          />
+          <Link to="/login" className="inline-flex items-center gap-2 text-sm font-bold text-[#39FF14]">
+            Ready to get started? <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+        <FAQAccordion />
       </section>
     </MarketingShell>
   );
