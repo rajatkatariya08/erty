@@ -10,6 +10,7 @@ const SERVICE_GROUPS = [
   {
     title: "Home appliance repair",
     slug: "appliance-repair-gurugram",
+    categoryId: "home_appliances",
     description: "AC, refrigerator, washing machine, microwave, geyser, RO, TV, chimney, and dishwasher support.",
     Icon: WashingMachine,
     color: "#FF007F",
@@ -18,6 +19,7 @@ const SERVICE_GROUPS = [
   {
     title: "Handyman and installation",
     slug: "handyman-services-gurugram",
+    categoryId: "handyman",
     description: "Electrical, plumbing, drilling, fittings, furniture assembly, TV mounting, and odd jobs.",
     Icon: Wrench,
     color: "#39FF14",
@@ -26,6 +28,7 @@ const SERVICE_GROUPS = [
   {
     title: "Car and bike support",
     slug: "car-bike-repair-gurugram",
+    categoryId: "car_and_bike",
     description: "Doorstep inspection, battery help, minor fixes, servicing support, and emergency diagnosis.",
     Icon: Bike,
     color: "#00E5FF",
@@ -539,10 +542,10 @@ export function MarketingHome() {
           body="Choose a category to see available services, starting prices, and what to expect before a technician arrives."
         />
         <div className="grid gap-4 lg:grid-cols-3">
-          {SERVICE_GROUPS.map(({ title, description, slug, Icon, color, image }) => (
+          {SERVICE_GROUPS.map(({ title, description, categoryId, Icon, color, image }) => (
             <Link
               key={title}
-              to={`/services/${slug}`}
+              to={`/category/${categoryId}`}
               className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101017] transition-colors hover:border-white/25"
               style={{ borderLeftColor: color, borderLeftWidth: 3 }}
             >
