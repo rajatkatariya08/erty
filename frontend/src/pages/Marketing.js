@@ -333,6 +333,14 @@ function processImageStyle(image) {
   };
 }
 
+function ProcessArtwork({ image, alt }) {
+  return (
+    <div className="process-artwork">
+      <img src={image} alt={alt} />
+    </div>
+  );
+}
+
 function ProcessScreen({ step }) {
   if (step.screen === "scan") {
     return (
@@ -369,26 +377,32 @@ function ProcessScreen({ step }) {
 
   if (step.screen === "parts") {
     return (
-      <div className="process-screen" style={processImageStyle(step.image)}>
-        <div className="flex items-center justify-between"><div><div className="process-label">POSSIBLE PARTS</div><div className="mt-1 font-display text-xl font-black">Market price check</div></div><PackageSearch className="h-8 w-8 text-[#FFEA00]" /></div>
-        <div className="mt-5 space-y-2">
-          <div className="process-part"><span>AC capacitor</span><strong>INR 450-900</strong></div>
-          <div className="process-part"><span>Fan motor</span><strong>INR 1,800-3,400</strong></div>
-          <div className="process-part"><span>Air filter set</span><strong>INR 350-750</strong></div>
+      <div className="process-screen process-screen-with-art">
+        <ProcessArtwork image={step.image} alt="Air-conditioner replacement parts" />
+        <div className="process-screen-content">
+          <div className="flex items-center justify-between"><div><div className="process-label">POSSIBLE PARTS</div><div className="mt-1 font-display text-xl font-black">Market price check</div></div><PackageSearch className="h-8 w-8 shrink-0 text-[#FFEA00]" /></div>
+          <div className="mt-5 space-y-2">
+            <div className="process-part"><span>AC capacitor</span><strong>INR 450-900</strong></div>
+            <div className="process-part"><span>Fan motor</span><strong>INR 1,800-3,400</strong></div>
+            <div className="process-part"><span>Air filter set</span><strong>INR 350-750</strong></div>
+          </div>
+          <div className="mt-4 flex items-center gap-2 text-xs text-white/50"><BadgeCheck className="h-4 w-4 shrink-0 text-[#39FF14]" /> Indicative online prices, checked before booking</div>
         </div>
-        <div className="mt-4 flex items-center gap-2 text-xs text-white/50"><BadgeCheck className="h-4 w-4 text-[#39FF14]" /> Indicative online prices, checked before booking</div>
       </div>
     );
   }
 
   return (
-    <div className="process-screen" style={processImageStyle(step.image)}>
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#39FF14] text-[#05050A] shadow-[0_0_30px_rgba(57,255,20,0.4)]"><BadgeCheck className="h-8 w-8" /></div>
-      <div className="mt-4 text-center font-display text-2xl font-black">Visit confirmed</div>
-      <div className="mx-auto mt-2 max-w-xs text-center text-sm text-white/55">A verified appliance technician is assigned to your request.</div>
-      <div className="mt-6 grid grid-cols-2 gap-3">
-        <div className="process-stat"><span>Arrival</span><strong>Today, 4-5 PM</strong></div>
-        <div className="process-stat"><span>Payment</span><strong className="text-[#00E5FF]">After service</strong></div>
+    <div className="process-screen process-screen-with-art">
+      <ProcessArtwork image={step.image} alt="Verified technician arriving for a service visit" />
+      <div className="process-screen-content process-booking-content">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#39FF14] text-[#05050A] shadow-[0_0_30px_rgba(57,255,20,0.4)]"><BadgeCheck className="h-7 w-7" /></div>
+        <div className="mt-4 font-display text-2xl font-black">Visit confirmed</div>
+        <div className="mt-2 text-sm text-white/55">A verified appliance technician is assigned to your request.</div>
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="process-stat"><span>Arrival</span><strong>Today, 4-5 PM</strong></div>
+          <div className="process-stat"><span>Payment</span><strong className="text-[#00E5FF]">After service</strong></div>
+        </div>
       </div>
     </div>
   );

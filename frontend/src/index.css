@@ -299,6 +299,40 @@ h1, h2, h3, h4, h5, h6, .font-display {
   box-shadow: 0 0 38px color-mix(in srgb, var(--process-accent) 10%, transparent);
 }
 
+.process-screen-with-art {
+  display: grid;
+  grid-template-columns: minmax(132px, 0.74fr) minmax(0, 1.26fr);
+  gap: 18px;
+  padding: 16px;
+  background: linear-gradient(145deg, rgba(28,28,36,0.96), rgba(13,13,19,0.98));
+}
+
+.process-artwork {
+  min-height: 234px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  background: #08090d;
+}
+
+.process-artwork img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.process-screen-content {
+  min-width: 0;
+}
+
+.process-booking-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .process-screen-scan { display: flex; flex-direction: column; }
 .process-live { display: flex; align-items: center; gap: 9px; font-size: 13px; color: rgba(255,255,255,0.7); }
 .process-live .status-dot { width: 10px; height: 10px; }
@@ -353,6 +387,8 @@ h1, h2, h3, h4, h5, h6, .font-display {
   .process-showcase { padding: 8px; }
   .process-stage { min-height: 332px; padding: 14px; }
   .process-screen { min-height: 280px; padding: 18px; }
+  .process-screen-with-art { grid-template-columns: minmax(104px, 0.7fr) minmax(0, 1.3fr); gap: 12px; padding: 12px; }
+  .process-artwork { min-height: 256px; }
   .process-caption { grid-template-columns: 44px 1fr; gap: 10px; min-height: 160px; padding: 18px 16px; }
   .process-number { font-size: 34px; }
   .process-caption h3 { font-size: 20px; }
